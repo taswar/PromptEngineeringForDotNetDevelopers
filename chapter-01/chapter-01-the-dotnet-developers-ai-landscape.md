@@ -18,7 +18,7 @@ Here's the thing: someone has to build the AI features. Someone has to integrate
 
 That someone is you.
 
-Welcome to the book that's not going to tell you that AI will replace your job. It's going to help you use AI to do your job better — and to build the kinds of features that weren't economically or technically feasible six months ago.
+Welcome to the book that's not going to tell you that AI will replace your job. It's going to help you use AI to do your job better — and to build features that weren't worth the cost or engineering effort before LLMs became accessible.
 
 Also: this book is in C#. No Python. No "just install Conda and then pip install twelve things that may or may not conflict." Just `dotnet new console` and we're off.
 
@@ -100,7 +100,7 @@ There's a spectrum, and it maps roughly to cost vs capability:
 │  LM Studio                OpenAI API             Azure AI       │
 │  + Phi-4 / Mistral        + GPT-4o               Foundry        │
 │  + Llama 3                + Claude               + GPT-4o       │
-│  + Gemma 3                + Gemini               + Your models  │
+│  + Gemma 2                + Gemini               + Your models  │
 │                                                                  │
 │  ✅ Free                  ⚠️ Pay per token        ✅ SLA         │
 │  ✅ Private               ✅ Latest models        ✅ Compliance  │
@@ -176,11 +176,9 @@ Also in **Volume 2** — but we'll use Azure-hosted models as one of your three 
 
 ---
 
-## 1.6 Why C# Is a Perfectly Good Language for AI Work
+## 1.6 Why C# Is Great for AI Application Development
 
-There is a persistent myth that you need Python to do AI work. It comes from the fact that most ML research tooling — PyTorch, TensorFlow, HuggingFace Transformers — lives in the Python ecosystem.
-
-But here's the thing: **you're not training models**. You're *calling* them.
+Here's the thing: **you're not training models**. You're *calling* them. And for that, C# has everything you need — plus a few advantages Python doesn't.
 
 When you call `IChatClient.CompleteAsync()`, you're making an HTTP request to an API and parsing JSON. The LLM itself is running somewhere else — on your local GPU via LM Studio, on OpenAI's servers, or in Azure. Your C# code is the client, not the runtime.
 
@@ -212,6 +210,16 @@ It's part science (there are techniques that reliably work: zero-shot, few-shot,
 
 The good news: it's learnable, it's transferable across models, and the principles are stable even as the models change.
 
+A tiny taste. Here's the difference a well-engineered prompt makes:
+
+```
+❌ Bad:   "Write code"
+✅ Good:  "Write a C# method that validates an email address using regex,
+           handles null input gracefully, and returns a bool."
+```
+
+Same task. Wildly different results. That's what this book teaches you to do deliberately, not by accident.
+
 Here's the maturity ladder this book follows:
 
 | Level | Techniques | What you can build |
@@ -228,7 +236,7 @@ By the end of Volume 1, you'll be solidly at intermediate level — able to engi
 
 LLMs make things up. This is called **hallucination**, and it's not a bug that will be fixed in the next update — it's an inherent property of how these models work.
 
-When the model doesn't know something, it doesn't say "I don't know." It generates text that *looks like* a correct answer. It'll invent citations, make up function signatures, and confidently tell you that a library has an API it definitely does not have.
+When the model doesn't know something, it doesn't return `null` or throw a `NotImplementedException`. It generates text that *looks like* a correct answer. It'll invent citations, make up function signatures, and confidently tell you that a library has an API it definitely does not have.
 
 This matters for C# developers because:
 
@@ -272,7 +280,9 @@ using Microsoft.Extensions.AI;
 
 // Works with LM Studio (local), OpenAI, or Azure AI Foundry
 // — swap the provider, keep the code
-IChatClient client = new OllamaChatClient(new Uri("http://localhost:11434"), "phi4");
+IChatClient client = new OllamaChatClient(
+    new Uri("http://localhost:1234"),  // LM Studio default port
+    modelId: "phi-4");                // exact model name from LM Studio's UI
 
 var response = await client.CompleteAsync(
     "Explain what a delegate is in C# in two sentences, like I'm a junior dev.");

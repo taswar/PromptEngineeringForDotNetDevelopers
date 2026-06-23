@@ -10,13 +10,16 @@
 
   <ItemGroup>
     <!-- Core MEAI abstraction - the foundation of this entire book -->
-    <PackageReference Include="Microsoft.Extensions.AI" Version="9.*" />
-    <!-- Ollama provider - works with LM Studio's OpenAI-compatible endpoint -->
-    <PackageReference Include="Microsoft.Extensions.AI.Ollama" Version="9.*" />
+    <!-- Check https://www.nuget.org/packages/Microsoft.Extensions.AI for latest stable version -->
+    <PackageReference Include="Microsoft.Extensions.AI" Version="9.0.*" />
+    <!-- Ollama provider - works with LM Studio because LM Studio exposes an Ollama-compatible endpoint -->
+    <PackageReference Include="Microsoft.Extensions.AI.Ollama" Version="9.0.*" />
     <!-- OpenAI provider - swap one line to go from local to cloud -->
-    <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.0.*" />
     <!-- Azure AI Inference provider - for Azure AI Foundry -->
-    <PackageReference Include="Microsoft.Extensions.AI.AzureAIInference" Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.AI.AzureAIInference" Version="9.0.*" />
+    <!-- Azure SDK dependency for credentials -->
+    <PackageReference Include="Azure.AI.Inference" Version="1.*" />
   </ItemGroup>
 
 </Project>

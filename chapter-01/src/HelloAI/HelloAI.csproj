@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>HelloAI</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Core MEAI abstraction - the foundation of this entire book -->
+    <PackageReference Include="Microsoft.Extensions.AI" Version="9.*" />
+    <!-- Ollama provider - works with LM Studio's OpenAI-compatible endpoint -->
+    <PackageReference Include="Microsoft.Extensions.AI.Ollama" Version="9.*" />
+    <!-- OpenAI provider - swap one line to go from local to cloud -->
+    <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.*" />
+    <!-- Azure AI Inference provider - for Azure AI Foundry -->
+    <PackageReference Include="Microsoft.Extensions.AI.AzureAIInference" Version="9.*" />
+  </ItemGroup>
+
+</Project>

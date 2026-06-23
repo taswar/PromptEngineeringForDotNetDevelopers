@@ -126,7 +126,7 @@ The goal of this book is to get you comfortable enough that **switching provider
 
 ## 1.5 The Microsoft AI Stack for .NET Developers
 
-Microsoft has been quietly assembling a very coherent AI stack for .NET. Here's how the pieces fit together — and how this book (and the next volume) map onto them:
+Microsoft has been quietly assembling a very coherent AI stack for .NET. Here's how the pieces fit together — and how this book map onto them:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -141,11 +141,11 @@ Microsoft has been quietly assembling a very coherent AI stack for .NET. Here's 
 │  Engineering     │  ──────────────────────────          │
 │  (This book)     │  Agents • Tools • Memory • MCP       │
 │                  │  Multi-agent orchestration            │
-│                  │  (Vol 2)                              │
+│                  │                                │
 ├──────────────────┴──────────────────────────────────────┤
 │                  Azure AI Foundry                        │
 │                  Model deployments • Evaluations         │
-│                  PromptOps • Safety • Compliance (Vol 2) │
+│                  PromptOps • Safety • Compliance  │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -166,13 +166,11 @@ MEAI is what this book is built on. Every code example uses it. Think of it as t
 
 Microsoft Agent Framework is the layer above MEAI that handles **AI agents**: systems that can use tools, maintain memory, plan multi-step tasks, and coordinate with other agents. It's the unification of Semantic Kernel and AutoGen into a single, coherent SDK.
 
-You'll meet it properly in **Volume 2**. In this volume, we'll give you enough prompt engineering foundations that when you get there, you're not fighting the model — you're directing it.
+In this book, we'll give you enough prompt engineering foundations that when you get there, you're not fighting the model — you're directing it.
 
 ### Azure AI Foundry
 
 Azure AI Foundry is Microsoft's cloud platform for deploying, monitoring, and governing AI models at enterprise scale. It handles model deployment, safety filtering, usage monitoring, evaluation pipelines, and integration with the rest of the Azure ecosystem.
-
-Also in **Volume 2** — but we'll use Azure-hosted models as one of your three provider options from Chapter 2 onwards.
 
 ---
 
@@ -226,9 +224,8 @@ Here's the maturity ladder this book follows:
 |---|---|---|
 | **Beginner** | Zero-shot, role prompting | Simple Q&A, classification |
 | **Intermediate** | Few-shot, chain-of-thought, structured output | Document processing, code tools |
-| **Advanced (Vol 2)** | RAG, tool calling, agents | Autonomous workflows, chatbots with memory |
 
-By the end of Volume 1, you'll be solidly at intermediate level — able to engineer reliable prompts for real production features.
+By the end of this book, you'll be solidly at intermediate level — able to engineer reliable prompts for real production features.
 
 ---
 
@@ -250,7 +247,7 @@ We'll cover mitigation patterns throughout the book. For now, just keep the rule
 
 ## 1.9 What This Book Covers (and What It Doesn't)
 
-**Volume 1 covers:**
+**This book covers:**
 
 - Setting up a free local LLM dev environment with LM Studio (Chapter 2)
 - How LLMs work — just enough theory to write good code (Chapter 3)
@@ -259,13 +256,13 @@ We'll cover mitigation patterns throughout the book. For now, just keep the rule
 - Structured outputs, streaming, resilience patterns (Chapter 6)
 - Practical prompt patterns for real developer tasks (Chapter 7)
 
-**Volume 1 does not cover:**
+**What it does not cover:**
 
 - Training or fine-tuning models (this is application development, not ML research)
-- Tool calling (Volume 2)
-- Retrieval-Augmented Generation / RAG (Volume 2)
-- Microsoft Agent Framework and multi-agent systems (Volume 2)
-- Azure AI Foundry deployment and PromptOps (Volume 2)
+- Tool calling / MCP
+- Retrieval-Augmented Generation / RAG 
+- Microsoft Agent Framework and multi-agent systems 
+- Azure AI Foundry deployment and PromptOps
 
 The split is intentional. Prompt engineering is the foundation. If you don't understand how to reliably get good output from an LLM, building agents on top of it is going to be a very frustrating experience. We're building the floor before we build the walls.
 
@@ -306,7 +303,7 @@ Here's what to take from this chapter:
 | Base vs Instruction-tuned | You'll always use instruction-tuned models |
 | Cost spectrum | LM Studio (free) → OpenAI → Azure AI Foundry |
 | MEAI | Provider-agnostic .NET interface — write once, swap providers |
-| Microsoft Agent Framework | The next layer — agents, memory, tools (Vol 2) |
+| Microsoft Agent Framework | The next layer — agents, memory, tools (beyond this book) |
 | Prompt engineering | Design inputs, get reliable outputs. Learnable craft. |
 | Hallucinations | Real, inherent, design for them |
 | This book | Foundation first. Agents later. C# throughout. |

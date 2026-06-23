@@ -1,0 +1,59 @@
+{
+  "version": 2,
+  "dgSpecHash": "/tZCuyAQU7E=",
+  "success": false,
+  "projectFilePath": "C:\\eBook\\PromptEngineeringForDotNetDevelopers\\chapter-01\\src\\HelloAI\\HelloAI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\microsoft.extensions.ai\\9.5.0\\microsoft.extensions.ai.9.5.0.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\microsoft.extensions.ai.abstractions\\10.3.0\\microsoft.extensions.ai.abstractions.10.3.0.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\microsoft.extensions.ai.openai\\10.3.0\\microsoft.extensions.ai.openai.10.3.0.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\8.0.0\\microsoft.extensions.caching.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.3\\microsoft.extensions.logging.abstractions.8.0.3.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\openai\\2.8.0\\openai.2.8.0.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\system.clientmodel\\1.8.1\\system.clientmodel.1.8.1.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\system.diagnostics.diagnosticsource\\8.0.1\\system.diagnostics.diagnosticsource.8.0.1.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\system.io.pipelines\\10.0.3\\system.io.pipelines.10.0.3.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\system.memory.data\\8.0.1\\system.memory.data.8.0.1.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\system.net.serversentevents\\9.0.9\\system.net.serversentevents.9.0.9.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\system.text.encodings.web\\10.0.3\\system.text.encodings.web.10.0.3.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\system.text.json\\10.0.3\\system.text.json.10.0.3.nupkg.sha512",
+    "C:\\Users\\taswarbhatti\\.nuget\\packages\\system.threading.channels\\8.0.0\\system.threading.channels.8.0.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1103",
+      "level": "Error",
+      "message": "Unable to find a stable package Microsoft.Extensions.AI.Ollama with version (>= 9.0.0)\r\n  - Found 14 version(s) in nuget.org [ Nearest version: 9.7.0-preview.1.25356.2 ]\r\n  - Found 0 version(s) in Microsoft Visual Studio Offline Packages",
+      "projectPath": "C:\\eBook\\PromptEngineeringForDotNetDevelopers\\chapter-01\\src\\HelloAI\\HelloAI.csproj",
+      "filePath": "C:\\eBook\\PromptEngineeringForDotNetDevelopers\\chapter-01\\src\\HelloAI\\HelloAI.csproj",
+      "libraryId": "Microsoft.Extensions.AI.Ollama",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1103",
+      "level": "Error",
+      "message": "Unable to find a stable package Microsoft.Extensions.AI.AzureAIInference with version (>= 9.0.0)\r\n  - Found 20 version(s) in nuget.org [ Nearest version: 10.0.0-preview.1.25559.3 ]\r\n  - Found 0 version(s) in Microsoft Visual Studio Offline Packages",
+      "projectPath": "C:\\eBook\\PromptEngineeringForDotNetDevelopers\\chapter-01\\src\\HelloAI\\HelloAI.csproj",
+      "filePath": "C:\\eBook\\PromptEngineeringForDotNetDevelopers\\chapter-01\\src\\HelloAI\\HelloAI.csproj",
+      "libraryId": "Microsoft.Extensions.AI.AzureAIInference",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1102",
+      "level": "Error",
+      "message": "Unable to find package Azure.AI.Inference with version (>= 1.0.0)\r\n  - Found 5 version(s) in nuget.org [ Nearest version: 1.0.0-beta.5 ]\r\n  - Found 0 version(s) in Microsoft Visual Studio Offline Packages",
+      "projectPath": "C:\\eBook\\PromptEngineeringForDotNetDevelopers\\chapter-01\\src\\HelloAI\\HelloAI.csproj",
+      "filePath": "C:\\eBook\\PromptEngineeringForDotNetDevelopers\\chapter-01\\src\\HelloAI\\HelloAI.csproj",
+      "libraryId": "Azure.AI.Inference",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
+}

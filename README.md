@@ -1,7 +1,7 @@
-# Prompt Engineering for C# Developers
-## Volume 1: From Zero to Production Prompts
+# Prompt Engineering for .NET Developers
+## From Zero to Production Prompts C#
 
-> A free ebook for .NET developers who want to build real AI-powered applications — without the hype, without the Python tax, and without spending a fortune on API credits.
+> A free ebook for .NET developers who want to build real AI-powered applications — without the hype, without the Python knowledge, and without spending a fortune on API credits.
 
 ---
 
@@ -21,7 +21,7 @@ PromptEngineeringForDotNetDevelopers/
 
 ## Prerequisites
 
-- .NET 8 or later
+- .NET 10 or later
 - An IDE (Visual Studio 2022, VS Code with C# Dev Kit, or Rider)
 - Either: a free LM Studio install OR an OpenAI/Azure API key
 - A healthy scepticism of AI marketing copy

@@ -298,12 +298,16 @@ No practicals in this chapter — but here's what's waiting for you in Chapter 2
 
 ```csharp
 using Microsoft.Extensions.AI;
+using OpenAI;
+using System.ClientModel;
 
 // Works with LM Studio (local), OpenAI, or Azure AI Foundry
 // — swap the provider, keep the code
-IChatClient client = new OllamaChatClient(
-    new Uri("http://localhost:1234"),  // LM Studio default port
-    modelId: "phi-4");                // exact model name from LM Studio's UI
+IChatClient client = new OpenAIClient(
+        new ApiKeyCredential("lm-studio"),               // ignored by LM Studio
+        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") }) // LM Studio default port
+    .GetChatClient("microsoft/phi-4-mini-reasoning")     // must match LM Studio's model id
+    .AsIChatClient();
 
 // GetResponseAsync in MEAI 10+ (was CompleteAsync in earlier versions)
 var response = await client.GetResponseAsync(

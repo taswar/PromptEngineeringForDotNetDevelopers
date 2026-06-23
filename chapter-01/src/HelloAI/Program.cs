@@ -7,21 +7,26 @@
 // Pick one, comment out the others, or try all three.
 
 using Microsoft.Extensions.AI;
+using OpenAI;
+using System.ClientModel;
 
 // ─────────────────────────────────────────────────────────────────
 // OPTION A: Local (Free) — LM Studio
 // Download LM Studio from https://lmstudio.ai
-// Start the local server, download a model (e.g. phi-4, llama3.2),
-// and enable the server in the LM Studio UI.
+// Start the local server, download a model, and enable the server.
 //
-// Note: LM Studio uses port 1234 by default (not 11434 — that's Ollama).
-// We use the OllamaChatClient because LM Studio exposes an Ollama-compatible
-// API endpoint. Same wire format, different port.
+// LM Studio exposes an OpenAI-compatible API at /v1 (NOT Ollama-compatible),
+// so we use the OpenAI client pointed at the local endpoint.
+// The API key is ignored by LM Studio but the SDK requires a non-empty value.
+//
+// Tip: run `GET http://localhost:5000/v1/models` to see the exact model id
+// to use below — it must match what LM Studio reports (e.g. the value of "id").
 // ─────────────────────────────────────────────────────────────────
-IChatClient client = new OllamaChatClient(
-    new Uri("http://localhost:1234"),  // LM Studio default port
-    modelId: "phi-4"                  // must match exactly what LM Studio shows
-);
+IChatClient client = new OpenAIClient(
+        new ApiKeyCredential("lm-studio"),               // ignored by LM Studio
+        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:5000/v1") })
+    .GetChatClient("microsoft/phi-4-mini-reasoning")     // must match LM Studio's model id
+    .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────
 // OPTION B: OpenAI API

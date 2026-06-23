@@ -2,7 +2,7 @@
 
 > **What you'll learn:** Why AI matters to C# developers (without the marketing speak), what LLMs actually are, how the Microsoft AI stack fits together, and where this book is taking you.
 
-> **No code in this chapter.** Just concepts, honest opinions, and a roadmap. The code starts in Chapter 2. Grab a coffee.
+> **No code just a peek I promise in this chapter.** Just concepts, honest opinions, and a roadmap. The code starts in Chapter 2. Grab a coffee.
 
 ---
 
@@ -57,14 +57,14 @@ There are two flavours of LLM you'll encounter, and the difference matters for h
 
 A **base LLM** is trained purely to predict the next token. Give it the start of a sentence, it'll complete it.
 
-```
+```text
 Input:  "The capital of France is"
 Output: " Paris, and the city is known for..."
 ```
 
 Ask it a question and it might just... continue writing questions:
 
-```
+```text
 Input:  "What is the capital of France?"
 Output: "What is the capital of Germany? What is the capital of Spain?..."
 ```
@@ -75,7 +75,7 @@ Because that's what "the next token" looks like in a dataset full of quiz sheets
 
 An **instruction-tuned LLM** has been further trained — using a technique called **RLHF** (Reinforcement Learning from Human Feedback) — to follow instructions rather than just complete text.
 
-```
+```text
 Input:  "What is the capital of France?"
 Output: "The capital of France is Paris."
 ```
@@ -128,25 +128,46 @@ The goal of this book is to get you comfortable enough that **switching provider
 
 Microsoft has been quietly assembling a very coherent AI stack for .NET. Here's how the pieces fit together — and how this book map onto them:
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                   Your Application                       │
-├─────────────────────────────────────────────────────────┤
-│         Microsoft.Extensions.AI  (MEAI)                  │
-│         ─────────────────────────────                    │
-│         IChatClient  •  IEmbeddingGenerator              │
-│         Provider-agnostic abstractions                   │
-├──────────────────┬──────────────────────────────────────┤
-│  Prompt          │  Microsoft Agent Framework            │
-│  Engineering     │  ──────────────────────────          │
-│  (This book)     │  Agents • Tools • Memory • MCP       │
-│                  │  Multi-agent orchestration            │
-│                  │                                │
-├──────────────────┴──────────────────────────────────────┤
-│                  Azure AI Foundry                        │
-│                  Model deployments • Evaluations         │
-│                  PromptOps • Safety • Compliance  │
-└─────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    App["🖥️ Your Application"]
+
+    subgraph MEAI["Microsoft.Extensions.AI  (MEAI)"]
+        ICC["IChatClient"]
+        IEG["IEmbeddingGenerator"]
+        note["Provider-agnostic abstractions"]
+    end
+
+    subgraph ThisBook["This Book"]
+        PE["Prompt Engineering\n─────────────────\nZero-shot • Few-shot • CoT\nStructured output • Patterns"]
+    end
+
+    subgraph Future["Beyond This Book"]
+        MAF["Microsoft Agent Framework\n─────────────────\nAgents • Tools • Memory\nMCP • Multi-agent orchestration"]
+    end
+
+    subgraph Cloud["Azure AI Foundry"]
+        AIF["Model deployments • Evaluations\nPromptOps • Safety • Compliance"]
+    end
+
+    subgraph Providers["Model Providers  (swap via config)"]
+        direction LR
+        LMS["🖥️ LM Studio\n(Local / Free)"]
+        OAI["☁️ OpenAI API\n(Cloud)"]
+        AZR["☁️ Azure OpenAI\n(Enterprise)"]
+    end
+
+    App --> MEAI
+    MEAI --> ThisBook
+    MEAI --> Future
+    Future --> Cloud
+    MEAI --> Providers
+
+    style ThisBook fill:#1a6b3c,color:#fff,stroke:#2d9e5c
+    style Future fill:#1a3a6b,color:#fff,stroke:#2d5e9e
+    style Cloud fill:#0d4f8b,color:#fff,stroke:#1a6bb5
+    style MEAI fill:#2d2d2d,color:#fff,stroke:#555
+    style Providers fill:#3d3d3d,color:#fff,stroke:#666
 ```
 
 Let's briefly introduce each layer:
@@ -210,7 +231,7 @@ The good news: it's learnable, it's transferable across models, and the principl
 
 A tiny taste. Here's the difference a well-engineered prompt makes:
 
-```
+```text
 ❌ Bad:   "Write code"
 ✅ Good:  "Write a C# method that validates an email address using regex,
            handles null input gracefully, and returns a bool."
@@ -224,6 +245,9 @@ Here's the maturity ladder this book follows:
 |---|---|---|
 | **Beginner** | Zero-shot, role prompting | Simple Q&A, classification |
 | **Intermediate** | Few-shot, chain-of-thought, structured output | Document processing, code tools |
+| **Advanced** | RAG, tool calling, agents | Autonomous workflows, chatbots with memory |
+
+> 📝 **Note:** This book takes you from beginner to solid intermediate. The advanced tier (RAG, agents, MCP) is a natural next step once the prompting fundamentals are solid.
 
 By the end of this book, you'll be solidly at intermediate level — able to engineer reliable prompts for real production features.
 
@@ -281,10 +305,12 @@ IChatClient client = new OllamaChatClient(
     new Uri("http://localhost:1234"),  // LM Studio default port
     modelId: "phi-4");                // exact model name from LM Studio's UI
 
-var response = await client.CompleteAsync(
-    "Explain what a delegate is in C# in two sentences, like I'm a junior dev.");
+// GetResponseAsync in MEAI 10+ (was CompleteAsync in earlier versions)
+var response = await client.GetResponseAsync(
+    [new ChatMessage(ChatRole.User,
+        "Explain what a delegate is in C# in two sentences, like I'm a junior dev.")]);
 
-Console.WriteLine(response.Message.Text);
+Console.WriteLine(response.Text);  // ChatResponse.Text — the convenience shortcut
 ```
 
 That's it. One interface, three provider options, and you're having a conversation with an LLM in C#.

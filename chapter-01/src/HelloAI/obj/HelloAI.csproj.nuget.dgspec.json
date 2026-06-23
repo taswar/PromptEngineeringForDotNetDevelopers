@@ -54,23 +54,23 @@
           "dependencies": {
             "Azure.AI.Inference": {
               "target": "Package",
-              "version": "[1.*, )"
+              "version": "[*-*, )"
             },
             "Microsoft.Extensions.AI": {
               "target": "Package",
-              "version": "[9.0.*, )"
+              "version": "[*-*, )"
             },
             "Microsoft.Extensions.AI.AzureAIInference": {
               "target": "Package",
-              "version": "[9.0.*, )"
+              "version": "[*-*, )"
             },
             "Microsoft.Extensions.AI.Ollama": {
               "target": "Package",
-              "version": "[9.0.*, )"
+              "version": "[*-*, )"
             },
             "Microsoft.Extensions.AI.OpenAI": {
               "target": "Package",
-              "version": "[9.0.*, )"
+              "version": "[*-*, )"
             }
           },
           "imports": [

@@ -6,8 +6,6 @@
 // Three ways to call an LLM. Same code. Different providers.
 // Pick one, comment out the others, or try all three.
 
-using Azure;
-using Azure.AI.Inference;
 using Microsoft.Extensions.AI;
 
 // ─────────────────────────────────────────────────────────────────
@@ -27,7 +25,7 @@ IChatClient client = new OllamaChatClient(
 
 // ─────────────────────────────────────────────────────────────────
 // OPTION B: OpenAI API
-// Set OPENAI_API_KEY in your environment or user-secrets:
+// Add using OpenAI; and set OPENAI_API_KEY in your environment:
 //   dotnet user-secrets set "OPENAI_API_KEY" "sk-..."
 // ─────────────────────────────────────────────────────────────────
 // var openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY")!;
@@ -36,25 +34,29 @@ IChatClient client = new OllamaChatClient(
 
 // ─────────────────────────────────────────────────────────────────
 // OPTION C: Azure AI Foundry
+// Add using Azure; using Azure.AI.Inference;
 // Set AZURE_AI_ENDPOINT and AZURE_AI_KEY in your environment:
 //   dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://your-resource.inference.ai.azure.com"
 //   dotnet user-secrets set "AZURE_AI_KEY" "your-key-here"
 // ─────────────────────────────────────────────────────────────────
 // var endpoint = new Uri(Environment.GetEnvironmentVariable("AZURE_AI_ENDPOINT")!);
-// var credential = new AzureKeyCredential(
+// var credential = new Azure.AzureKeyCredential(
 //     Environment.GetEnvironmentVariable("AZURE_AI_KEY")!);
-// IChatClient client = new ChatCompletionsClient(endpoint, credential)
+// IChatClient client = new Azure.AI.Inference.ChatCompletionsClient(endpoint, credential)
 //     .AsChatClient(modelId: "gpt-4o");
 
 // ─────────────────────────────────────────────────────────────────
-// Your first LLM call — identical regardless of which provider you chose
+// Your first LLM call — identical regardless of which provider you chose.
+// Note: In MEAI 10+, the method is GetResponseAsync (was CompleteAsync in earlier versions).
+// ChatRole.User = your message | ChatRole.System = instructions | ChatRole.Assistant = model reply
 // ─────────────────────────────────────────────────────────────────
 Console.WriteLine("Sending your first message to an LLM...\n");
 
-var response = await client.CompleteAsync(
-    "Explain what a delegate is in C# in two sentences, like I'm a junior developer.");
+var response = await client.GetResponseAsync(
+    [new ChatMessage(ChatRole.User,
+        "Explain what a delegate is in C# in two sentences, like I'm a junior developer.")]);
 
 Console.WriteLine("Response:");
-Console.WriteLine(response.Message.Text);
+Console.WriteLine(response.Text);  // ChatResponse.Text is the convenience shortcut
 
 Console.WriteLine("\n✅ If you see a response above, you're good to go. On to Chapter 2!");

@@ -1,0 +1,20 @@
+## .NET build output
+bin/
+obj/
+
+## User-specific files
+*.user
+.vs/
+
+## NuGet packages
+*.nupkg
+*.nuspec
+
+## Environment / secrets
+.env
+appsettings.local.json
+secrets.json
+
+## OS
+.DS_Store
+Thumbs.db

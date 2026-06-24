@@ -91,12 +91,15 @@ With LM Studio locally, you pay in electricity and GPU time. But you still need 
 
 Every model has a **context window** — the maximum number of tokens it can process in a single call (input + output combined). This is a hard limit, not a suggestion. Common sizes:
 
-| Context window | Typical model examples |
-|---|---|
-| 4K–8K tokens   | GPT-3.5-turbo (original), GPT-4 base (8K), smaller local models |
-| 16K–32K tokens | GPT-3.5-turbo-16k, Mistral 7B, many mid-range open-source models |
-| 128K tokens    | GPT-4o, many modern frontier models |
-| 1M+ tokens     | Gemini 1.5 Pro (outlier, but it exists) |
+| Context window | Typical model examples | Notes |
+|---|---|---|
+| 8K–32K tokens | Older GPT-4 variants, Mistral 7B, smaller local GGUF models | Still common in self-hosted models |
+| 128K tokens | GPT-4o, GPT-4.1, Claude 3.5 Sonnet, Llama 3.1 70B | The current mainstream frontier tier |
+| 200K tokens | Claude 3.5/3.7 Sonnet, Claude Opus 4 | Anthropic leads on long-context |
+| 1M tokens | Gemini 1.5 Pro / 2.0 Flash, GPT-4.1 (extended) | Long enough for entire codebases |
+| 2M+ tokens | Gemini 2.5 Pro | Outlier — useful for very large documents |
+
+> 💡 **For this book:** LM Studio local models typically have 8K–32K context windows depending on the model. GPT-4o and Claude 3.5+ in the cloud give you 128K–200K. Don't spend energy worrying about limits until you hit them — but know the wall exists.
 
 When you hit the limit, one of two things happens — and neither is great:
 1. The API returns an error (the better outcome — at least you know)

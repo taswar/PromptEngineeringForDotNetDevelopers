@@ -92,35 +92,9 @@ One of the most practical decisions you'll make as a .NET developer working with
 
 There's a spectrum, and it maps roughly to cost vs capability:
 
-```
-┌────────────────────────────────────────────────────────────────┐
-│  LOCAL                    CLOUD API              ENTERPRISE     │
-│  (Free)                   (Pay-per-token)        (Azure)        │
-│                                                                  │
-│  LM Studio                OpenAI API             Azure AI       │
-│  + Phi-4 / Mistral        + GPT-4o               Foundry        │
-│  + Llama 3                + Claude               + GPT-4o       │
-│  + Gemma 2                + Gemini               + Your models  │
-│                                                                  │
-│  ✅ Free                  ⚠️ Pay per token        ✅ SLA         │
-│  ✅ Private               ✅ Latest models        ✅ Compliance  │
-│  ⚠️ Hardware-limited      ✅ Easy to start        ⚠️ Setup cost  │
-│  ⚠️ Smaller models        ⚠️ Data leaves machine  ⚠️ More config │
-└────────────────────────────────────────────────────────────────┘
-```
+![Cost Spectrum: Local → Cloud → Enterprise](images/cost-spectrum-light.png)
 
-This book teaches all three, starting with **local** so you can learn without worrying about API bills. The code you write for LM Studio is *identical* to the code you'll use against OpenAI or Azure — because `Microsoft.Extensions.AI` abstracts the provider away.
-
-### When to use each
-
-| Scenario | Recommendation |
-|---|---|
-| Learning, prototyping, cost-sensitive | LM Studio (local) |
-| Production app, need latest models | OpenAI API |
-| Enterprise, compliance, Azure integration | Azure AI Foundry |
-| Want to avoid any data leaving your machine | LM Studio (local) |
-
-The goal of this book is to get you comfortable enough that **switching providers is a config change, not a rewrite**.
+> 💡 **All three tiers use identical C# code.** The `Microsoft.Extensions.AI` abstraction means switching providers is a config change, not a rewrite — you'll see this in Chapter 2.
 
 ---
 
@@ -305,7 +279,7 @@ using System.ClientModel;
 // — swap the provider, keep the code
 IChatClient client = new OpenAIClient(
         new ApiKeyCredential("lm-studio"),               // ignored by LM Studio
-        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:5000/v1") })
+        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
     .GetChatClient("microsoft/phi-4-mini-reasoning")     // must match LM Studio's model id
     .AsIChatClient();
 

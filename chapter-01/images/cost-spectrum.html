@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cost Spectrum Diagram</title>
+<script>
+  (() => {
+    const param = new URLSearchParams(window.location.search).get("scoutTheme");
+    const theme = param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+:root {
+  color-scheme: light;
+  --cp-bg: #f7f4ef;
+  --cp-bg-elevated: #fcfbf8;
+  --cp-surface: #ffffff;
+  --cp-surface-soft: #f5f5f5;
+  --cp-border: #dedede;
+  --cp-border-strong: #919191;
+  --cp-text: #242424;
+  --cp-text-muted: #5c5c5c;
+  --cp-text-soft: #6f6f6f;
+  --cp-accent: #b11f4b;
+  --cp-accent-hover: #9a1a41;
+  --cp-accent-soft: rgba(177, 31, 75, 0.08);
+  --cp-accent-fg: #ffffff;
+  --cp-success: #16a34a;
+  --cp-danger: #dc2626;
+  --cp-warning: #ca8a04;
+  --cp-link: #0078d4;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --cp-bg: #3d3b3a;
+  --cp-bg-elevated: #343231;
+  --cp-surface: #292929;
+  --cp-surface-soft: #2e2e2e;
+  --cp-border: #474747;
+  --cp-border-strong: #5f5f5f;
+  --cp-text: #dedede;
+  --cp-text-muted: #919191;
+  --cp-text-soft: #b0b0b0;
+  --cp-accent: #fd8ea1;
+  --cp-accent-soft: rgba(253, 142, 161, 0.14);
+  --cp-accent-fg: #1a1a1a;
+  --cp-success: #4ade80;
+  --cp-danger: #f87171;
+  --cp-warning: #fbbf24;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Segoe UI", Aptos, Calibri, -apple-system, sans-serif;
+  background: var(--cp-bg);
+  color: var(--cp-text);
+  padding: 32px;
+  min-height: 100vh;
+}
+
+.diagram-wrapper {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ── Spectrum arrow header ── */
+.spectrum-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 0;
+}
+.spectrum-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cp-text-muted);
+  white-space: nowrap;
+  padding: 0 10px;
+}
+.spectrum-arrow {
+  flex: 1;
+  height: 3px;
+  background: linear-gradient(to right, #16a34a, #0078d4, var(--cp-accent));
+  border-radius: 2px;
+  position: relative;
+}
+.spectrum-arrow::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: -4px;
+  border-left: 10px solid var(--cp-accent);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
+/* ── Three-column grid ── */
+.tiers {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.tier {
+  border-radius: 12px;
+  border: 1px solid var(--cp-border);
+  background: var(--cp-surface);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.tier-header {
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--cp-border);
+}
+.tier-name {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.tier-subtitle {
+  font-size: 11px;
+  color: var(--cp-text-muted);
+  margin-top: 2px;
+}
+
+.tier--local  .tier-header { background: rgba(22, 163, 74, 0.07); }
+.tier--cloud  .tier-header { background: rgba(0, 120, 212, 0.07); }
+.tier--enterprise .tier-header { background: rgba(177, 31, 75, 0.07); }
+
+.tier--local  .tier-name { color: #16a34a; }
+.tier--cloud  .tier-name { color: #0078d4; }
+.tier--enterprise .tier-name { color: var(--cp-accent); }
+
+.tier-body { padding: 14px 16px; }
+
+.tier-tools {
+  list-style: none;
+  margin-bottom: 14px;
+  border-bottom: 1px dashed var(--cp-border);
+  padding-bottom: 12px;
+}
+.tier-tools li {
+  font-size: 12.5px;
+  color: var(--cp-text-muted);
+  padding: 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tier-tools li::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--cp-border-strong);
+  flex-shrink: 0;
+}
+
+.tier-traits { list-style: none; }
+.tier-traits li {
+  font-size: 12px;
+  padding: 3px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.trait-icon { flex-shrink: 0; font-size: 12px; line-height: 1.5; }
+.trait-text { color: var(--cp-text); }
+
+/* ── Decision table ── */
+.decision-section {
+  background: var(--cp-surface);
+  border: 1px solid var(--cp-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.decision-title {
+  padding: 12px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cp-text-muted);
+  border-bottom: 1px solid var(--cp-border);
+  background: var(--cp-surface-soft);
+}
+
+.decision-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.decision-table tr:not(:last-child) td {
+  border-bottom: 1px solid var(--cp-border);
+}
+.decision-table td {
+  padding: 10px 18px;
+  font-size: 13px;
+  vertical-align: middle;
+}
+.decision-table td:first-child {
+  color: var(--cp-text-muted);
+  width: 55%;
+  border-right: 1px solid var(--cp-border);
+}
+.decision-table td:last-child {
+  font-weight: 600;
+}
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.badge--local      { background: rgba(22,163,74,0.12); color: #15803d; }
+.badge--cloud      { background: rgba(0,120,212,0.10); color: #0369a1; }
+.badge--enterprise { background: rgba(177,31,75,0.10); color: var(--cp-accent); }
+
+html[data-theme="dark"] .badge--local      { background: rgba(74,222,128,0.14); color: #4ade80; }
+html[data-theme="dark"] .badge--cloud      { background: rgba(77,166,255,0.14); color: #4da6ff; }
+html[data-theme="dark"] .badge--enterprise { background: rgba(253,142,161,0.14); color: #fd8ea1; }
+
+.caption {
+  margin-top: 14px;
+  font-size: 11.5px;
+  color: var(--cp-text-soft);
+  text-align: center;
+  font-style: italic;
+}
+</style>
+</head>
+<body>
+<div class="diagram-wrapper">
+
+  <!-- Spectrum arrow -->
+  <div class="spectrum-header">
+    <span class="spectrum-label">Cost & Setup</span>
+    <div class="spectrum-arrow"></div>
+    <span class="spectrum-label">Capability & Compliance</span>
+  </div>
+
+  <!-- Three tiers -->
+  <div class="tiers">
+
+    <div class="tier tier--local">
+      <div class="tier-header">
+        <div class="tier-name">Local</div>
+        <div class="tier-subtitle">Free · Private · On-device</div>
+      </div>
+      <div class="tier-body">
+        <ul class="tier-tools">
+          <li>LM Studio</li>
+          <li>Phi-4 / Mistral</li>
+          <li>Llama 3</li>
+          <li>Gemma 2</li>
+        </ul>
+        <ul class="tier-traits">
+          <li><span class="trait-icon">✅</span><span class="trait-text">Free</span></li>
+          <li><span class="trait-icon">✅</span><span class="trait-text">Data stays on machine</span></li>
+          <li><span class="trait-icon">⚠️</span><span class="trait-text">Hardware-limited</span></li>
+          <li><span class="trait-icon">⚠️</span><span class="trait-text">Smaller models</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tier tier--cloud">
+      <div class="tier-header">
+        <div class="tier-name">Cloud API</div>
+        <div class="tier-subtitle">Pay-per-token · Instant access</div>
+      </div>
+      <div class="tier-body">
+        <ul class="tier-tools">
+          <li>OpenAI API</li>
+          <li>GPT-4o</li>
+          <li>Claude</li>
+          <li>Gemini</li>
+        </ul>
+        <ul class="tier-traits">
+          <li><span class="trait-icon">⚠️</span><span class="trait-text">Pay per token</span></li>
+          <li><span class="trait-icon">✅</span><span class="trait-text">Latest models</span></li>
+          <li><span class="trait-icon">✅</span><span class="trait-text">Easy to start</span></li>
+          <li><span class="trait-icon">⚠️</span><span class="trait-text">Data leaves machine</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tier tier--enterprise">
+      <div class="tier-header">
+        <div class="tier-name">Enterprise</div>
+        <div class="tier-subtitle">Azure AI Foundry · SLA · Compliance</div>
+      </div>
+      <div class="tier-body">
+        <ul class="tier-tools">
+          <li>Azure AI Foundry</li>
+          <li>GPT-4o</li>
+          <li>Your own models</li>
+          <li>&nbsp;</li>
+        </ul>
+        <ul class="tier-traits">
+          <li><span class="trait-icon">✅</span><span class="trait-text">SLA guaranteed</span></li>
+          <li><span class="trait-icon">✅</span><span class="trait-text">Compliance ready</span></li>
+          <li><span class="trait-icon">⚠️</span><span class="trait-text">Setup cost</span></li>
+          <li><span class="trait-icon">⚠️</span><span class="trait-text">More config required</span></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- When to use each -->
+  <div class="decision-section">
+    <div class="decision-title">When to Use Each</div>
+    <table class="decision-table">
+      <tr>
+        <td>Learning, prototyping, or cost-sensitive work</td>
+        <td><span class="badge badge--local">LM Studio (local)</span></td>
+      </tr>
+      <tr>
+        <td>Production app needing the latest models</td>
+        <td><span class="badge badge--cloud">OpenAI API</span></td>
+      </tr>
+      <tr>
+        <td>Enterprise, compliance, or Azure integration</td>
+        <td><span class="badge badge--enterprise">Azure AI Foundry</span></td>
+      </tr>
+      <tr>
+        <td>Data must not leave your machine</td>
+        <td><span class="badge badge--local">LM Studio (local)</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <p class="caption">Figure 1.4 — The provider spectrum. The code you write is identical across all three — only the config changes.</p>
+</div>
+</body>
+</html>

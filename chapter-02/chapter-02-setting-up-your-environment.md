@@ -232,13 +232,15 @@ You'd choose this path if:
 1. In the [Azure portal](https://portal.azure.com), search for **Azure AI Foundry** and create a new hub and visit foundry page.
 2. Within that hub, create a **project** (I didn't add the UI becasue currently there are 2 portals New vs Old, pick the one that is intuitive to you)
 3. In the project, go to **Deployments** and deploy a model — GPT-4o-mini is the recommended choice due to price, but feel free to deploy a different model
-4. Copy the **Endpoint URL** and **Key** from the deployment page or use the Managed Identities if your policy requires you. 
+5. Copy the **Endpoint URL** and **Key** from the deployment page — or use Managed Identities if your policy requires it.
+
+> ⚠️ **Use the base URL only — no path suffix.** The SDK client appends the path automatically (e.g. `/openai/deployments/<name>/chat/completions`). If you copy the full URL with `/chat/completions` already appended, you'll get a doubled path and a 404. The endpoint should look like: `https://your-resource.cognitiveservices.azure.com`
 
 Store them as user-secrets:
 
 ```bash
-dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://your-resource.services.ai.azure.com/models"
-dotnet user-secrets set "AZURE_AI_KEY" "your-key-here"
+dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://your-resource.cognitiveservices.azure.com"
+dotnet user-secrets set "AZURE_AI_KEY" "your-api-key-here"
 ```
 
 > ⚠️ **The endpoint URL matters.** Azure AI Foundry endpoints follow a specific format. Make sure you copy the URL from the deployment page — not the hub page, not the project page, the *deployment* page. Using the wrong URL is the most common cause of `ResourceNotFound` errors.
@@ -264,6 +266,7 @@ Edit `HelloAI.csproj` and add these package references inside the `<ItemGroup>`:
 <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="*-*" />
 <PackageReference Include="Microsoft.Extensions.AI.AzureAIInference" Version="*-*" />
 <PackageReference Include="Azure.AI.Inference" Version="*-*" />
+<PackageReference Include="Azure.AI.OpenAI" Version="*-*" />  <!-- AzureOpenAIClient for cognitiveservices.azure.com -->
 ```
 
 Then restore:
@@ -301,7 +304,7 @@ flowchart TB
     subgraph Concrete["Config Decides This"]
         LMStudio["OpenAIClient\n(LM Studio)"]
         OpenAIAPI["OpenAIClient\n(OpenAI API)"]
-        AzureAI["ChatCompletionsClient\n(Azure AI Foundry)"]
+        AzureAI["AzureOpenAIClient\n(Azure AI Foundry)"]
     end
 
     SameCall["⚡ GetResponseAsync([...])\nIdentical regardless of provider"]
@@ -364,18 +367,25 @@ IChatClient client = new OpenAIClient(
 // ─────────────────────────────────────────────────────────────────
 // OPTION C: Azure AI Foundry
 // ─────────────────────────────────────────────────────────────────
-// dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://your-resource.services.ai.azure.com/models"
-// dotnet user-secrets set "AZURE_AI_KEY" "your-key-here"
+// Store the *base* endpoint and key in user-secrets — no /chat/completions,
+// no ?api-version. The client appends the path itself. Passing the full path
+// causes a doubled URL (.../chat/completions/chat/completions → 404).
+//   dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://your-resource.cognitiveservices.azure.com"
+//   dotnet user-secrets set "AZURE_AI_KEY" "your-api-key-here"
+//
+// cognitiveservices.azure.com = Azure OpenAI resource → use AzureOpenAIClient.
+// "o4-mini" below is the DEPLOYMENT NAME from your Azure AI Foundry deployment.
 // ─────────────────────────────────────────────────────────────────
-// IChatClient client = new Azure.AI.Inference.ChatCompletionsClient(
+// IChatClient client = new Azure.AI.OpenAI.AzureOpenAIClient(
 //         new Uri(config["AZURE_AI_ENDPOINT"]
 //             ?? throw new InvalidOperationException(
 //                 "AZURE_AI_ENDPOINT is not set. Run: dotnet user-secrets set \"AZURE_AI_ENDPOINT\" \"https://...\"")),
-//         new Azure.AzureKeyCredential(
+//         new ApiKeyCredential(
 //             config["AZURE_AI_KEY"]
 //             ?? throw new InvalidOperationException(
 //                 "AZURE_AI_KEY is not set. Run: dotnet user-secrets set \"AZURE_AI_KEY\" \"your-key\"")))
-//     .AsChatClient("gpt-4o");
+//     .GetChatClient("o4-mini")     // deployment name — not the model family name
+//     .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────
 // The call — identical for all three providers.
@@ -409,7 +419,7 @@ Task<ChatResponse> GetResponseAsync(
 
 You send it a list of `ChatMessage` objects. Each message has a `ChatRole` — `User` for your input, `System` for instructions, `Assistant` for previous model responses. You get back a `ChatResponse`. The `response.Text` property is a convenience shortcut that returns the content of the first assistant message as a string.
 
-The concrete implementations — `OpenAIClient`, `ChatCompletionsClient` — each wrap their provider's SDK and translate `IChatClient` calls into the right HTTP requests. Your code never sees the wire format.
+The concrete implementations — `OpenAIClient`, `AzureOpenAIClient` — each wrap their provider's SDK and translate `IChatClient` calls into the right HTTP requests. Your code never sees the wire format.
 
 > 📝 **Version note:** In MEAI 9.x, the method was `CompleteAsync` and returned `ChatCompletion`. In MEAI 10+, it's `GetResponseAsync` returning `ChatResponse`. If you're reading older samples online and they use `CompleteAsync`, that's why they look different. Use `GetResponseAsync` — it's the current API.
 
@@ -417,10 +427,10 @@ The concrete implementations — `OpenAIClient`, `ChatCompletionsClient` — eac
 
 Two small method calls do the translation work:
 
-- `.GetChatClient("model-name")` — on `OpenAIClient`, this returns an `OpenAI.Chat.ChatClient` scoped to a specific model
-- `.AsIChatClient()` — this is an extension method from `Microsoft.Extensions.AI.OpenAI` that wraps the provider-specific client in the `IChatClient` interface
+- `.GetChatClient("model-name")` — on `OpenAIClient` or `AzureOpenAIClient`, this returns a chat client scoped to a specific model or deployment
+- `.AsIChatClient()` — an extension method that wraps the provider-specific client in the `IChatClient` interface
 
-For Azure, `ChatCompletionsClient.AsChatClient("model-name")` does both steps at once. The Azure AI Inference SDK has its own extension method from `Microsoft.Extensions.AI.AzureAIInference`.
+For Azure, `AzureOpenAIClient.GetChatClient("deployment-name").AsIChatClient()` uses the same two-step pattern as LM Studio and OpenAI. The deployment name (e.g. `"o4-mini"`) must match exactly what you named the deployment in Azure AI Foundry — not the model family name.
 
 ---
 

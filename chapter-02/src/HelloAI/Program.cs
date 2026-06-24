@@ -67,22 +67,26 @@ var config = new ConfigurationBuilder()
 // ─────────────────────────────────────────────────────────────────
 // OPTION C: Azure AI Foundry
 // ─────────────────────────────────────────────────────────────────
-// Store endpoint and key in user-secrets:
-//   dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://zeytinsoft-ai.cognitiveservices.azure.com/"
-//   dotnet user-secrets set "AZURE_AI_KEY" ""
+// Store the *base* endpoint and key in user-secrets (no /chat/completions,
+// no ?api-version) — the client appends the path and negotiates the version:
+//   dotnet user-secrets set "AZURE_AI_ENDPOINT" "<your-endpoint>"
+//   dotnet user-secrets set "AZURE_AI_KEY" "<your-key>"
 //
-// Get the endpoint URL from the deployment page in Azure AI Foundry
-// (hub → project → Deployments → your deployment → copy endpoint).
+// A cognitiveservices.azure.com resource is Azure OpenAI, so use
+// AzureOpenAIClient. It targets a recent api-version, which o-series
+// models like o4-mini require (>= 2024-12-01-preview). "o4-mini" below
+// is the DEPLOYMENT name from your Foundry/Azure OpenAI deployment.
 // ─────────────────────────────────────────────────────────────────
-IChatClient client = new Azure.AI.Inference.ChatCompletionsClient(
+IChatClient client = new Azure.AI.OpenAI.AzureOpenAIClient(
         new Uri(config["AZURE_AI_ENDPOINT"]
             ?? throw new InvalidOperationException(
-                "AZURE_AI_ENDPOINT is not set. Run: dotnet user-secrets set \"AZURE_AI_ENDPOINT\" \"https://...\"" )),
-        new Azure.AzureKeyCredential(
+                "AZURE_AI_ENDPOINT is not set. Run: dotnet user-secrets set \"AZURE_AI_ENDPOINT\" \"<your-endpoint>\"" )),
+        new ApiKeyCredential(
             config["AZURE_AI_KEY"]
             ?? throw new InvalidOperationException(
-                "AZURE_AI_KEY is not set. Run: dotnet user-secrets set \"AZURE_AI_KEY\" \"your-key\"")))
-    .AsIChatClient("o4-mini");
+                "AZURE_AI_KEY is not set. Run: dotnet user-secrets set \"AZURE_AI_KEY\" \"<your-key>\"")))
+    .GetChatClient("o4-mini")     // deployment name
+    .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────
 // The call — identical regardless of which provider you chose.

@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="*-*" />
     <PackageReference Include="Microsoft.Extensions.AI.AzureAIInference" Version="*-*" />
     <PackageReference Include="Azure.AI.Inference" Version="*-*" />
+    <PackageReference Include="Azure.AI.OpenAI" Version="*-*" />                          <!-- AzureOpenAIClient for cognitiveservices.azure.com (Azure OpenAI) resources -->
     <!--
       Configuration package — needed to read user-secrets via IConfiguration.
       dotnet user-secrets stores in %APPDATA%, NOT in OS environment variables.

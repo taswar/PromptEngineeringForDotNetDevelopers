@@ -150,6 +150,24 @@ Every token in all of the following counts against your limit:
 └─────────────────────────────────────────────────────────────┘
 ```
 
+```mermaid
+flowchart LR
+    subgraph Window["◄── Token Budget Ceiling (e.g. 128K tokens) ──►"]
+        direction LR
+        SP["System Prompt\n~200 tok\n(fixed)"]
+        CH["Conversation History\n~400 tok\n(grows each turn)"]
+        UM["User Message\n~50 tok\n(current)"]
+        RB["Response Budget\n(remaining tokens)"]
+        SP --- CH --- UM --- RB
+    end
+    style SP fill:#1565c0,color:#fff,stroke:#0d47a1
+    style CH fill:#e65100,color:#fff,stroke:#bf360c
+    style UM fill:#2e7d32,color:#fff,stroke:#1b5e20
+    style RB fill:#f5f5f5,color:#555,stroke:#bdbdbd,stroke-dasharray:5 5
+```
+
+> _See [rendered PNG](images/context-window-light.png) for a colour-coded version. As conversation history grows, the Response Budget shrinks — until the API errors or silently drops the oldest messages._
+
 A bloated system prompt is a hidden tax on every call. If your system prompt is 2,000 tokens (roughly 1,500 words — not unreasonable for a detailed set of instructions), you're spending 2,000 tokens before the user says anything, on every single call.
 
 ### Stateless by default
@@ -206,6 +224,18 @@ When the model generates a response, it doesn't just deterministically output th
 - **High temperature** (approaching 2.0) flattens the distribution — probabilities spread out, and lower-probability tokens get a real chance of being selected. The model becomes more likely to pick something surprising.
 
 The keyboard autocomplete analogy makes this concrete: imagine your phone's autocomplete suggesting the next word.
+
+```mermaid
+xychart-beta
+    title "Token-Selection Probability by Temperature"
+    x-axis ["Top token", "2nd", "3rd", "4th", "5th", "6th"]
+    y-axis "Relative probability (%)" 0 --> 100
+    bar [95, 3, 1, 0.5, 0.3, 0.1]
+    bar [55, 22, 12, 6, 3, 2]
+    bar [25, 21, 18, 15, 12, 9]
+```
+
+> _Three bar series in order: **T = 0** (near-deterministic) · **T = 0.7** (balanced) · **T = 1.5** (creative). See [rendered PNG](images/temperature-distribution-light.png)._
 
 - **T = 0:** always picks the single top suggestion. Predictable, boring, factually reliable.
 - **T = 0.7:** usually picks from the top few suggestions, occasionally picks something in the top 10. Natural-feeling, coherent.

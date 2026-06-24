@@ -82,7 +82,7 @@ Output: "The capital of France is Paris."
 
 These are the models you'll use from C#: GPT-4o, Claude, Llama 3, Mistral, Phi-4. They're designed to respond to system prompts, user messages, and to behave helpfully and (mostly) safely.
 
-When you call `IChatClient.CompleteAsync()` in .NET, you're always talking to an instruction-tuned model. The distinction matters because it explains *why* your prompts work the way they do — and why structure and clarity in your instructions make such a difference.
+When you call `IChatClient.GetResponseAsync()` in .NET, you're always talking to an instruction-tuned model. The distinction matters because it explains *why* your prompts work the way they do — and why structure and clarity in your instructions make such a difference.
 
 ---
 
@@ -153,7 +153,7 @@ This is the foundation. MEAI provides provider-agnostic interfaces for working w
 - `IChatClient` — send chat messages, get completions
 - `IEmbeddingGenerator<string, Embedding<float>>` — generate vector embeddings
 - Middleware pipeline for logging, caching, and telemetry
-- Works with: OpenAI, Azure OpenAI, Ollama (which LM Studio is compatible with), and more
+- Works with: OpenAI, Azure OpenAI, LM Studio (OpenAI-compatible `/v1`), Ollama, and more
 
 MEAI is what this book is built on. Every code example uses it. Think of it as the `ILogger<T>` of the AI world — write to the interface, swap the implementation.
 
@@ -173,7 +173,7 @@ Azure AI Foundry is Microsoft's cloud platform for deploying, monitoring, and go
 
 Here's the thing: **you're not training models**. You're *calling* them. And for that, C# has everything you need — plus a few advantages Python doesn't.
 
-When you call `IChatClient.CompleteAsync()`, you're making an HTTP request to an API and parsing JSON. The LLM itself is running somewhere else — on your local GPU via LM Studio, on OpenAI's servers, or in Azure. Your C# code is the client, not the runtime.
+When you call `IChatClient.GetResponseAsync()`, you're making an HTTP request to an API and parsing JSON. The LLM itself is running somewhere else — on your local GPU via LM Studio, on OpenAI's servers, or in Azure. Your C# code is the client, not the runtime.
 
 Microsoft has invested significantly in first-class .NET AI support:
 
@@ -279,7 +279,7 @@ using System.ClientModel;
 // — swap the provider, keep the code
 IChatClient client = new OpenAIClient(
         new ApiKeyCredential("lm-studio"),               // ignored by LM Studio
-        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
+        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:5000/v1") })
     .GetChatClient("microsoft/phi-4-mini-reasoning")     // must match LM Studio's model id
     .AsIChatClient();
 
@@ -316,7 +316,7 @@ Here's what to take from this chapter:
 
 ## Up Next: Chapter 2 — Setting Up Your AI Development Environment
 
-In Chapter 2, we install LM Studio, download a local model, set up the NuGet packages, and write your first `IChatClient.CompleteAsync()` call — hitting all three backends (local, OpenAI, Azure) with the same C# code. No API key required to get started.
+In Chapter 2, we install LM Studio, download a local model, set up the NuGet packages, and write your first `IChatClient.GetResponseAsync()` call — hitting all three backends (local, OpenAI, Azure) with the same C# code. No API key required to get started.
 
 See you there.
 

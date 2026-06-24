@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>HelloAI-chapter-02</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Microsoft.Extensions.AI packages are in preview — *-* picks up latest prerelease -->
+    <PackageReference Include="OpenAI" Version="*-*" />                                    <!-- OpenAIClient, ApiKeyCredential -->
+    <PackageReference Include="Microsoft.Extensions.AI" Version="*-*" />
+    <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="*-*" />
+    <PackageReference Include="Microsoft.Extensions.AI.AzureAIInference" Version="*-*" />
+    <PackageReference Include="Azure.AI.Inference" Version="*-*" />
+    <!--
+      Configuration package — needed to read user-secrets via IConfiguration.
+      dotnet user-secrets stores in %APPDATA%, NOT in OS environment variables.
+      IConfiguration bridges both, so the same code works in dev and in CI/CD.
+    -->
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="*" />
+  </ItemGroup>
+
+</Project>

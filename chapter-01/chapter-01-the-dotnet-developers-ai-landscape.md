@@ -305,7 +305,7 @@ using System.ClientModel;
 // — swap the provider, keep the code
 IChatClient client = new OpenAIClient(
         new ApiKeyCredential("lm-studio"),               // ignored by LM Studio
-        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") }) // LM Studio default port
+        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:5000/v1") })
     .GetChatClient("microsoft/phi-4-mini-reasoning")     // must match LM Studio's model id
     .AsIChatClient();
 

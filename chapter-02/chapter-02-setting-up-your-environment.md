@@ -132,7 +132,7 @@ Search for your chosen model in LM Studio's discovery panel and download it. Thi
 
 ### Starting the Local Server
 
-In LM Studio, go to **Local Server** (the icon looks like `</>` or a plug, depending on version). Load the model you downloaded, then click **Start Server**.
+In LM Studio, go to **Local Server** (the icon looks like 🖥️ in the left sidebar). Load the model you downloaded, then click **Start Server**.
 
 The server binds to port **5000** by default and exposes an OpenAI-compatible REST API at `http://localhost:5000/v1`.
 

@@ -146,6 +146,20 @@ This stores the key in your user profile, outside the project directory, outside
 
 > ⚠️ **`dotnet user-secrets` and `Environment.GetEnvironmentVariable()` are different things.** User-secrets are stored in a JSON file and surfaced via `IConfiguration` — not as OS environment variables. The `Program.cs` in this chapter uses `IConfiguration` to read them. You don't need to do anything extra — just run `dotnet user-secrets set` and the code handles the rest.
 
+```mermaid
+flowchart LR
+    US["📄 UserSecrets\nsecrets.json"]
+    ENV["🌐 OS Environment\nVariables"]
+    IC["⚙️ IConfiguration"]
+    Code["config[KEY]\nin C# code"]
+    Note["ℹ️ Env vars added last —\nthey override user-secrets\ngood for CI/CD"]
+
+    US -->|"AddUserSecrets()"| IC
+    ENV -->|"AddEnvironmentVariables()\nadded last = wins"| IC
+    IC --> Code
+    IC -.-> Note
+```
+
 ### Which Model to Use
 
 Use `gpt-4o-mini` for this book. It's cheap, fast, and capable enough for everything you'll do here. `gpt-4o` is more powerful but costs roughly 15× more per token — you don't need it while learning.
@@ -226,6 +240,31 @@ Here's the core architectural idea behind all the code in this book: **`IChatCli
 Think of it like `IDbConnection` in ADO.NET. You write SQL against the interface. Whether that connection is backed by SQL Server, PostgreSQL, or SQLite is configured elsewhere — your query logic doesn't change. `IChatClient` works the same way. Your prompt, your message list, your call to `GetResponseAsync()` — none of that changes when you switch from LM Studio to OpenAI to Azure.
 
 What does change is the three or four lines that construct the client. You configure those once, at the top of the app or in a DI registration, and the rest of the code is identical.
+
+```mermaid
+flowchart TB
+    YourCode["🖥️ Your C# Code\nGetResponseAsync(...)"]
+
+    subgraph Abstract["Your Code Talks to This"]
+        IChat["IChatClient"]
+    end
+
+    subgraph Concrete["Config Decides This"]
+        LMStudio["OpenAIClient\n(LM Studio)"]
+        OpenAIAPI["OpenAIClient\n(OpenAI API)"]
+        AzureAI["ChatCompletionsClient\n(Azure AI Foundry)"]
+    end
+
+    SameCall["⚡ GetResponseAsync([...])\nIdentical regardless of provider"]
+
+    YourCode --> IChat
+    IChat --> LMStudio
+    IChat --> OpenAIAPI
+    IChat --> AzureAI
+    LMStudio --> SameCall
+    OpenAIAPI --> SameCall
+    AzureAI --> SameCall
+```
 
 ### The Full Program.cs
 

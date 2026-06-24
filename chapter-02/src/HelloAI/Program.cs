@@ -32,7 +32,7 @@ var config = new ConfigurationBuilder()
 // 2. Download a model (Phi-4 Mini recommended for 4 GB VRAM;
 //    Llama 3.1 8B or Mistral 7B for 8 GB+)
 // 3. Go to Local Server, load the model, click Start Server
-// 4. Run GET http://localhost:5000/v1/models to find the exact model id
+// 4. Run GET http://localhost:1234/v1/models to find the exact model id
 //    and paste it into GetChatClient() below
 //
 // LM Studio exposes an OpenAI-compatible API at /v1 (NOT Ollama-compatible).
@@ -40,7 +40,7 @@ var config = new ConfigurationBuilder()
 // ─────────────────────────────────────────────────────────────────
 IChatClient client = new OpenAIClient(
         new ApiKeyCredential("lm-studio"),                // value is ignored by LM Studio
-        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:5000/v1") })
+        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
     .GetChatClient("microsoft/phi-4-mini-reasoning")      // update to match GET /v1/models output
     .AsIChatClient();
 

@@ -29,7 +29,7 @@ the one for the provider you want. The `GetResponseAsync` call at the bottom doe
 1. Download and install [LM Studio](https://lmstudio.ai)
 2. Download a model (Phi-4 Mini for 4 GB VRAM, Llama 3.1 8B for 8 GB+)
 3. Go to **Local Server**, load the model, click **Start Server**
-4. Verify the model ID: `GET http://localhost:5000/v1/models`
+4. Verify the model ID: `GET http://localhost:1234/v1/models`
 5. Update `GetChatClient("...")` in `Program.cs` to match the reported id
 
 No API key needed. Server runs on port **5000** at `/v1` (OpenAI-compatible).

@@ -334,14 +334,14 @@ using System.ClientModel;
 // 1. Download LM Studio from https://lmstudio.ai
 // 2. Download a model (Phi-4 Mini recommended for 4GB VRAM)
 // 3. Go to Local Server, load the model, click Start Server
-// 4. Run GET http://localhost:5000/v1/models to find the exact model id
+// 4. Run GET http://localhost:1234/v1/models to find the exact model id
 //
 // LM Studio exposes an OpenAI-compatible API at /v1 (NOT Ollama-compatible).
 // The API key is ignored by LM Studio; the SDK requires a non-empty value.
 // ─────────────────────────────────────────────────────────────────
 IChatClient client = new OpenAIClient(
         new ApiKeyCredential("lm-studio"),                // value is ignored by LM Studio
-        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:5000/v1") })
+        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
     .GetChatClient("microsoft/phi-4-mini-reasoning")      // must match GET /v1/models exactly
     .AsIChatClient();
 

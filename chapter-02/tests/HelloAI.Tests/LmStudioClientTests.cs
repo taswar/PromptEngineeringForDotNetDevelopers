@@ -10,7 +10,7 @@ namespace HelloAI.Tests;
 /// </summary>
 public class LmStudioClientTests
 {
-    private const string LmStudioEndpoint = "http://localhost:5000/v1";
+    private const string LmStudioEndpoint = "http://localhost:1234/v1";
     private const string ModelId = "microsoft/phi-4-mini-reasoning";
 
     [Fact]

@@ -34,7 +34,7 @@ Passed!  - Failed: 0, Passed: 11, Skipped: 0, Total: 11
 
 ```bash
 # First: start LM Studio, load a model, click "Start Server"
-# Server must be running at http://localhost:5000/v1
+# Server must be running at http://localhost:1234/v1
 
 dotnet test --filter "Category=Integration"
 ```
@@ -46,7 +46,7 @@ dotnet test
 ```
 
 > ⚠️ If LM Studio is not running, the integration test will error with a clear message
-> (`LM Studio is not running at localhost:5000`) rather than failing silently.
+> (`LM Studio is not running at localhost:1234`) rather than failing silently.
 
 ---
 
@@ -60,7 +60,7 @@ Tests the `OpenAIClient` construction pattern used in `Program.cs` Option A.
 | Test | What it verifies |
 |---|---|
 | `LmStudio_Client_CanBeCreated_WithExpectedEndpoint` | The `OpenAIClient` + `ApiKeyCredential` + `OpenAIClientOptions` pattern produces a valid `IChatClient` |
-| `LmStudio_Endpoint_Uri_IsCorrect` | The endpoint URI is exactly `http://localhost:5000/v1` (guards against port typos) |
+| `LmStudio_Endpoint_Uri_IsCorrect` | The endpoint URI is exactly `http://localhost:1234/v1` (guards against port typos) |
 | `LmStudio_ModelId_MatchesExpectedPattern` | The model ID follows the `org/model-name` format (e.g., `microsoft/phi-4-mini-reasoning`) |
 | `LmStudio_ApiKey_ValueIsIgnoredButMustBeNonEmpty` | `ApiKeyCredential("lm-studio")` construction succeeds — LM Studio ignores the value but the SDK requires a non-empty string |
 
@@ -95,7 +95,7 @@ Tests the `IChatClient.GetResponseAsync()` call pattern using Moq. **Zero real n
 
 ### `LmStudioIntegrationTests` — Live call (1 test, skips if offline)
 
-**Requires LM Studio running at `localhost:5000` with a model loaded.**
+**Requires LM Studio running at `localhost:1234` with a model loaded.**
 
 | Test | What it verifies |
 |---|---|

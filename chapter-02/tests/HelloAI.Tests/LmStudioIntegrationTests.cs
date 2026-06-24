@@ -6,7 +6,7 @@ using System.Net.Sockets;
 namespace HelloAI.Tests;
 
 /// <summary>
-/// Integration tests that call a real LM Studio server at localhost:5000.
+/// Integration tests that call a real LM Studio server at localhost:1234.
 /// These are skipped gracefully when LM Studio is not running.
 ///
 /// Run only in environments where LM Studio is available:
@@ -20,7 +20,7 @@ public class LmStudioIntegrationTests
     {
         IChatClient client = new OpenAIClient(
                 new ApiKeyCredential("lm-studio"),
-                new OpenAIClientOptions { Endpoint = new Uri("http://localhost:5000/v1") })
+                new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
             .GetChatClient("microsoft/phi-4-mini-reasoning")
             .AsIChatClient();
 
@@ -42,11 +42,11 @@ public class LmStudioIntegrationTests
         {
             // LM Studio is not running — skip gracefully instead of failing CI.
             // Start LM Studio, load a model, and click "Start Server" to enable this test.
-            Skip("LM Studio is not running at localhost:5000. Start the server to run this test.");
+            Skip("LM Studio is not running at localhost:1234. Start the server to run this test.");
         }
         catch (SocketException)
         {
-            Skip("LM Studio is not running at localhost:5000 (SocketException).");
+            Skip("LM Studio is not running at localhost:1234 (SocketException).");
         }
     }
 

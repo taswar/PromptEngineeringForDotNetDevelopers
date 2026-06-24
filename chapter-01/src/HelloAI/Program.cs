@@ -19,12 +19,12 @@ using System.ClientModel;
 // so we use the OpenAI client pointed at the local endpoint.
 // The API key is ignored by LM Studio but the SDK requires a non-empty value.
 //
-// Tip: run `GET http://localhost:5000/v1/models` to see the exact model id
+// Tip: run `GET http://localhost:1234/v1/models` to see the exact model id
 // to use below — it must match what LM Studio reports (e.g. the value of "id").
 // ─────────────────────────────────────────────────────────────────
 IChatClient client = new OpenAIClient(
         new ApiKeyCredential("lm-studio"),               // ignored by LM Studio
-        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:5000/v1") })
+        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
     .GetChatClient("microsoft/phi-4-mini-reasoning")     // must match LM Studio's model id
     .AsIChatClient();
 

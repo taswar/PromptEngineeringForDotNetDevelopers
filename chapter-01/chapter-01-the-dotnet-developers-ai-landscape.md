@@ -310,7 +310,7 @@ Here's what to take from this chapter:
 | Microsoft Agent Framework | The next layer — agents, memory, tools (beyond this book) |
 | Prompt engineering | Design inputs, get reliable outputs. Learnable craft. |
 | Hallucinations | Real, inherent, design for them |
-| This book | Foundation first. Agents later. C# throughout. |
+| This book | Get the Foundation right first. Agents later. C# throughout. |
 
 ---
 

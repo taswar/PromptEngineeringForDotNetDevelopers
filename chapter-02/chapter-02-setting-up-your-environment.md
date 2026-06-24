@@ -69,6 +69,16 @@ Models in LM Studio come as GGUF files. Before you pick one, here's a quick deco
 
 > 📖 **Decoding model filenames**
 >
+> **What is GGUF?**
+> GGUF (GGML Unified Format) is the file format LM Studio uses to store and run LLMs locally. It was created by the [llama.cpp](https://github.com/ggerganov/llama.cpp) project — the open-source C++ runtime that powers local inference tools including LM Studio, Ollama, and Jan.
+>
+> Before GGUF there was GGML, and before that various ad-hoc formats. GGUF landed in 2023 and became the standard because it:
+> - Bundles model weights *and* metadata (tokenizer, architecture config, prompt format) in a single file
+> - Supports memory-mapped loading — the OS loads only the parts actively needed, so you can run a model larger than your RAM (slowly) without crashing
+> - Is designed for CPU *and* GPU inference — most models run partially on GPU and offload the rest to CPU/RAM automatically
+>
+> A GGUF file is essentially: *"everything you need to run this model, in one portable binary."* You download it, point LM Studio at it, done. No Python environment, no pip installs, no PyTorch version conflicts.
+>
 > **Parameters (the B number)**
 > The `B` number — `7B`, `13B`, `24B`, `70B` — is the number of *parameters* (weights) in the model, in billions. Think of parameters as the model's "memory of training". More parameters = more knowledge and reasoning ability, but also more RAM and VRAM required.
 >

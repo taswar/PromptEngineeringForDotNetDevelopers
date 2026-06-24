@@ -65,7 +65,46 @@ Both need to be running for the code to work. This is the source of 90% of "why 
 
 ### Picking a Model
 
-Models in LM Studio come as GGUF files — a quantised format that trades a little accuracy for dramatically lower memory requirements. The `Q4`, `Q5`, `Q8` suffix tells you the quantisation level: Q4 uses ~4 bits per weight (smallest, fastest, slightly less accurate), Q8 uses ~8 bits (closer to full precision, larger). Q4 or Q5 is the practical choice for most hardware.
+Models in LM Studio come as GGUF files. Before you pick one, here's a quick decoder for the naming system you'll see everywhere:
+
+> 📖 **Decoding model filenames**
+>
+> **Parameters (the B number)**
+> The `B` number — `7B`, `13B`, `24B`, `70B` — is the number of *parameters* (weights) in the model, in billions. Think of parameters as the model's "memory of training". More parameters = more knowledge and reasoning ability, but also more RAM and VRAM required.
+>
+> *Example: Devstral Small 24B has 24 billion parameters. A 24B model at full float32 precision would need ~96 GB of RAM — which is why quantisation exists.*
+>
+> **Quantisation (the Q number)**
+> Quantisation compresses model weights from 32-bit or 16-bit floats down to fewer bits per weight. Less precision = less VRAM = faster inference, at a small accuracy cost.
+>
+> | Suffix | Bits per weight | VRAM vs full | Quality |
+> |---|---|---|---|
+> | Q2 | ~2.x bits | ~10% of original | Noticeably degraded — avoid |
+> | Q3 | ~3.x bits | ~15% | Usable for simple tasks |
+> | Q4 | ~4.5 bits | ~20% | **Sweet spot for most hardware** |
+> | Q5 | ~5.5 bits | ~25% | Better quality, modest VRAM cost |
+> | Q6 | ~6.5 bits | ~30% | Near full quality |
+> | Q8 | ~8 bits | ~40% | Almost identical to full precision |
+>
+> *Rule of thumb: Q4 for constrained hardware, Q5 or Q6 if you have headroom, Q8 only if VRAM is not a concern.*
+>
+> **The K, M, L suffixes (K-quants)**
+> Modern GGUF files use "k-quants" — a smarter quantisation that applies *different precision to different layers*, keeping important layers (e.g. attention heads) at higher precision while compressing less critical layers more aggressively.
+>
+> | Suffix | Meaning | When to use |
+> |---|---|---|
+> | `_K_S` | K-quant, **S**mall — more aggressive compression | Very tight VRAM budget |
+> | `_K_M` | K-quant, **M**edium — balanced compression | Default choice; best quality/size ratio |
+> | `_K_L` | K-quant, **L**arge — less compression, higher quality | Plenty of VRAM, want best quality at this bit depth |
+>
+> *Example: `Q4_K_M` = 4-bit k-quant medium. Generally the recommended pick for Q4 models. `Q4_K_L` gives slightly better quality but is ~10% larger.*
+>
+> **Putting it together**
+> `Devstral-Small-24B-Q4_K_M.gguf` means:
+> - 24 billion parameters
+> - Quantised to 4-bit k-quant, medium variant
+> - Needs approximately **14–16 GB of VRAM** (24B × ~0.6 GB/B at Q4_K_M)
+> - Stored as a GGUF file, ready for LM Studio
 
 Pick based on how much VRAM your GPU has:
 

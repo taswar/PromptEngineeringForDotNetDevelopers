@@ -132,9 +132,9 @@ Search for your chosen model in LM Studio's discovery panel and download it. Thi
 
 ### Starting the Local Server
 
-In LM Studio, go to **Local Server** (the icon looks like 🖥️ in the left sidebar). Load the model you downloaded, then click **Start Server**.
+In LM Studio, go to **Local Server** (the icon looks like terminal 🖥️ in the left sidebar, depending on which version you have installed). Load the model you downloaded, then click **Start Server**, which can be next to the Status toggle button. (If it runs it will turn green).
 
-The server binds to port **5000** by default and exposes an OpenAI-compatible REST API at `http://localhost:5000/v1`.
+The server binds to port **1234** by default and exposes an OpenAI-compatible REST API at `http://localhost:1234/v1`.
 
 > ⚠️ **Two things must both be true for the server to work:**
 > 1. The server must be running (the status indicator is green)
@@ -149,7 +149,7 @@ This is the bit that catches people out. The model ID you pass to the `GetChatCl
 To find it, make this request while the server is running:
 
 ```
-GET http://localhost:5000/v1/models
+GET http://localhost:1234/v1/models
 ```
 
 You can do this in a browser, curl, or any HTTP client. The response looks like:
@@ -169,7 +169,7 @@ You can do this in a browser, curl, or any HTTP client. The response looks like:
 Use the `"id"` value. That exact string goes into your `GetChatClient()` call. If you see `microsoft/phi-4-mini-reasoning`, that's what you pass. If it says something different, use that instead.
 
 > 💡 **Why OpenAI client, not Ollama?**
-> LM Studio exposes an OpenAI-compatible API — it speaks the same HTTP protocol as `api.openai.com`. That means you use `OpenAIClient` pointed at your local endpoint, not `OllamaChatClient`. Ollama is a different tool with a different API. If you've used Ollama before, note that it runs on port **11434** — LM Studio runs on **5000**. Different tool, different port.
+> LM Studio exposes an OpenAI-compatible API — it speaks the same HTTP protocol as `api.openai.com`. That means you use `OpenAIClient` pointed at your local endpoint, not `OllamaChatClient`. Ollama is a different tool with a different API. If you've used Ollama before, note that it runs on port **11434** — LM Studio runs on **1234**. Different tool, different port.
 
 ---
 
@@ -229,10 +229,10 @@ You'd choose this path if:
 
 ### Setting Up
 
-1. In the [Azure portal](https://portal.azure.com), search for **Azure AI Foundry** and create a new hub
-2. Within that hub, create a **project**
-3. In the project, go to **Deployments** and deploy a model — GPT-4o is the recommended choice
-4. Copy the **Endpoint URL** and **Key** from the deployment page
+1. In the [Azure portal](https://portal.azure.com), search for **Azure AI Foundry** and create a new hub and visit foundry page.
+2. Within that hub, create a **project** (I didn't add the UI becasue currently there are 2 portals New vs Old, pick the one that is intuitive to you)
+3. In the project, go to **Deployments** and deploy a model — GPT-4o-mini is the recommended choice due to price, but feel free to deploy a different model
+4. Copy the **Endpoint URL** and **Key** from the deployment page or use the Managed Identities if your policy requires you. 
 
 Store them as user-secrets:
 

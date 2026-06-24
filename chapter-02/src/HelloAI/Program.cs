@@ -38,11 +38,11 @@ var config = new ConfigurationBuilder()
 // LM Studio exposes an OpenAI-compatible API at /v1 (NOT Ollama-compatible).
 // Port is 5000. The "lm-studio" API key is ignored but must be non-empty.
 // ─────────────────────────────────────────────────────────────────
-IChatClient client = new OpenAIClient(
-        new ApiKeyCredential("lm-studio"),                // value is ignored by LM Studio
-        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
-    .GetChatClient("microsoft/phi-4-mini-reasoning")      // update to match GET /v1/models output
-    .AsIChatClient();
+// IChatClient client = new OpenAIClient(
+//         new ApiKeyCredential("lm-studio"),                // value is ignored by LM Studio
+//         new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
+//     .GetChatClient("microsoft/phi-4-mini-reasoning")      // update to match GET /v1/models output
+//     .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────
 // OPTION B: OpenAI API
@@ -68,21 +68,21 @@ IChatClient client = new OpenAIClient(
 // OPTION C: Azure AI Foundry
 // ─────────────────────────────────────────────────────────────────
 // Store endpoint and key in user-secrets:
-//   dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://your-resource.services.ai.azure.com/models"
-//   dotnet user-secrets set "AZURE_AI_KEY" "your-key-here"
+//   dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://zeytinsoft-ai.cognitiveservices.azure.com/"
+//   dotnet user-secrets set "AZURE_AI_KEY" ""
 //
 // Get the endpoint URL from the deployment page in Azure AI Foundry
 // (hub → project → Deployments → your deployment → copy endpoint).
 // ─────────────────────────────────────────────────────────────────
-// IChatClient client = new Azure.AI.Inference.ChatCompletionsClient(
-//         new Uri(config["AZURE_AI_ENDPOINT"]
-//             ?? throw new InvalidOperationException(
-//                 "AZURE_AI_ENDPOINT is not set. Run: dotnet user-secrets set \"AZURE_AI_ENDPOINT\" \"https://...\"" )),
-//         new Azure.AzureKeyCredential(
-//             config["AZURE_AI_KEY"]
-//             ?? throw new InvalidOperationException(
-//                 "AZURE_AI_KEY is not set. Run: dotnet user-secrets set \"AZURE_AI_KEY\" \"your-key\"")))
-//     .AsChatClient("gpt-4o");
+IChatClient client = new Azure.AI.Inference.ChatCompletionsClient(
+        new Uri(config["AZURE_AI_ENDPOINT"]
+            ?? throw new InvalidOperationException(
+                "AZURE_AI_ENDPOINT is not set. Run: dotnet user-secrets set \"AZURE_AI_ENDPOINT\" \"https://...\"" )),
+        new Azure.AzureKeyCredential(
+            config["AZURE_AI_KEY"]
+            ?? throw new InvalidOperationException(
+                "AZURE_AI_KEY is not set. Run: dotnet user-secrets set \"AZURE_AI_KEY\" \"your-key\"")))
+    .AsIChatClient("o4-mini");
 
 // ─────────────────────────────────────────────────────────────────
 // The call — identical regardless of which provider you chose.

@@ -349,10 +349,15 @@ IChatClient client = new OpenAIClient(
 // OPTION B: OpenAI API
 // ─────────────────────────────────────────────────────────────────
 // dotnet user-secrets set "OPENAI_API_KEY" "sk-..."
+//
+// Note: user-secrets are read via IConfiguration (config["..."]), NOT
+// via Environment.GetEnvironmentVariable() — they live in a JSON file.
 // ─────────────────────────────────────────────────────────────────
 // IChatClient client = new OpenAIClient(
-//         Environment.GetEnvironmentVariable("OPENAI_API_KEY")
-//             ?? throw new InvalidOperationException("Set OPENAI_API_KEY in user-secrets"))
+//         new ApiKeyCredential(
+//             config["OPENAI_API_KEY"]
+//                 ?? throw new InvalidOperationException(
+//                     "OPENAI_API_KEY is not set. Run: dotnet user-secrets set \"OPENAI_API_KEY\" \"sk-...\"")))
 //     .GetChatClient("gpt-4o-mini")
 //     .AsIChatClient();
 
@@ -363,11 +368,13 @@ IChatClient client = new OpenAIClient(
 // dotnet user-secrets set "AZURE_AI_KEY" "your-key-here"
 // ─────────────────────────────────────────────────────────────────
 // IChatClient client = new Azure.AI.Inference.ChatCompletionsClient(
-//         new Uri(Environment.GetEnvironmentVariable("AZURE_AI_ENDPOINT")
-//             ?? throw new InvalidOperationException("Set AZURE_AI_ENDPOINT in user-secrets")),
+//         new Uri(config["AZURE_AI_ENDPOINT"]
+//             ?? throw new InvalidOperationException(
+//                 "AZURE_AI_ENDPOINT is not set. Run: dotnet user-secrets set \"AZURE_AI_ENDPOINT\" \"https://...\"")),
 //         new Azure.AzureKeyCredential(
-//             Environment.GetEnvironmentVariable("AZURE_AI_KEY")
-//             ?? throw new InvalidOperationException("Set AZURE_AI_KEY in user-secrets")))
+//             config["AZURE_AI_KEY"]
+//             ?? throw new InvalidOperationException(
+//                 "AZURE_AI_KEY is not set. Run: dotnet user-secrets set \"AZURE_AI_KEY\" \"your-key\"")))
 //     .AsChatClient("gpt-4o");
 
 // ─────────────────────────────────────────────────────────────────

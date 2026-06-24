@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>ParameterPlayground-chapter-03</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Microsoft.Extensions.AI packages are in preview — *-* picks up latest prerelease -->
+    <PackageReference Include="OpenAI" Version="*-*" />
+    <PackageReference Include="Microsoft.Extensions.AI" Version="*-*" />
+    <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="*-*" />
+    <PackageReference Include="Microsoft.Extensions.AI.AzureAIInference" Version="*-*" />
+    <PackageReference Include="Azure.AI.Inference" Version="*-*" />
+    <!--
+      IConfiguration reads user-secrets in dev and environment variables in CI/CD.
+      Never hardcode API keys — use dotnet user-secrets set "KEY" "value"
+    -->
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="*" />
+  </ItemGroup>
+
+</Project>

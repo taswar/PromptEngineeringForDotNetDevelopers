@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.Extensions.AI.AzureAIInference" Version="*-*" />
     <!-- Azure AI Inference SDK — latest beta, matches AzureAIInference adapter -->
     <PackageReference Include="Azure.AI.Inference"                    Version="*-*" />
+    <PackageReference Include="Azure.AI.OpenAI" Version="*-*" />  
   </ItemGroup>
 
 </Project>

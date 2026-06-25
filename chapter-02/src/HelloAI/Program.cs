@@ -11,6 +11,7 @@
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using OpenAI;
+using Azure.AI.OpenAI;
 using System.ClientModel;
 
 // ─────────────────────────────────────────────────────────────────
@@ -36,13 +37,13 @@ var config = new ConfigurationBuilder()
 //    and paste it into GetChatClient() below
 //
 // LM Studio exposes an OpenAI-compatible API at /v1 (NOT Ollama-compatible).
-// Port is 5000. The "lm-studio" API key is ignored but must be non-empty.
+// Port is 1234. The "lm-studio" API key is ignored but must be non-empty.
 // ─────────────────────────────────────────────────────────────────
-// IChatClient client = new OpenAIClient(
-//         new ApiKeyCredential("lm-studio"),                // value is ignored by LM Studio
-//         new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
-//     .GetChatClient("microsoft/phi-4-mini-reasoning")      // update to match GET /v1/models output
-//     .AsIChatClient();
+IChatClient client = new OpenAIClient(
+        new ApiKeyCredential("lm-studio"),                // value is ignored by LM Studio
+        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
+    .GetChatClient("microsoft/phi-4-mini-reasoning")      // update to match GET /v1/models output
+    .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────
 // OPTION B: OpenAI API
@@ -77,16 +78,16 @@ var config = new ConfigurationBuilder()
 // models like o4-mini require (>= 2024-12-01-preview). "o4-mini" below
 // is the DEPLOYMENT name from your Foundry/Azure OpenAI deployment.
 // ─────────────────────────────────────────────────────────────────
-IChatClient client = new Azure.AI.OpenAI.AzureOpenAIClient(
-        new Uri(config["AZURE_AI_ENDPOINT"]
-            ?? throw new InvalidOperationException(
-                "AZURE_AI_ENDPOINT is not set. Run: dotnet user-secrets set \"AZURE_AI_ENDPOINT\" \"<your-endpoint>\"" )),
-        new ApiKeyCredential(
-            config["AZURE_AI_KEY"]
-            ?? throw new InvalidOperationException(
-                "AZURE_AI_KEY is not set. Run: dotnet user-secrets set \"AZURE_AI_KEY\" \"<your-key>\"")))
-    .GetChatClient("o4-mini")     // deployment name
-    .AsIChatClient();
+// IChatClient client = new Azure.AI.OpenAI.AzureOpenAIClient(
+//         new Uri(config["AZURE_AI_ENDPOINT"]
+//             ?? throw new InvalidOperationException(
+//                 "AZURE_AI_ENDPOINT is not set. Run: dotnet user-secrets set \"AZURE_AI_ENDPOINT\" \"<your-endpoint>\"" )),
+//         new ApiKeyCredential(
+//             config["AZURE_AI_KEY"]
+//             ?? throw new InvalidOperationException(
+//                 "AZURE_AI_KEY is not set. Run: dotnet user-secrets set \"AZURE_AI_KEY\" \"<your-key>\"")))
+//     .GetChatClient("o4-mini")     // deployment name
+//     .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────
 // The call — identical regardless of which provider you chose.

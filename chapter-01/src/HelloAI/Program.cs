@@ -8,6 +8,7 @@
 
 using Microsoft.Extensions.AI;
 using OpenAI;
+using Azure.AI.OpenAI;
 using System.ClientModel;
 
 // ─────────────────────────────────────────────────────────────────
@@ -44,11 +45,16 @@ IChatClient client = new OpenAIClient(
 //   dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://your-resource.inference.ai.azure.com"
 //   dotnet user-secrets set "AZURE_AI_KEY" "your-key-here"
 // ─────────────────────────────────────────────────────────────────
-// var endpoint = new Uri(Environment.GetEnvironmentVariable("AZURE_AI_ENDPOINT")!);
-// var credential = new Azure.AzureKeyCredential(
-//     Environment.GetEnvironmentVariable("AZURE_AI_KEY")!);
-// IChatClient client = new Azure.AI.Inference.ChatCompletionsClient(endpoint, credential)
-//     .AsChatClient(modelId: "gpt-4o");
+// IChatClient client = new Azure.AI.OpenAI.AzureOpenAIClient(
+//         new Uri(config["AZURE_AI_ENDPOINT"]
+//             ?? throw new InvalidOperationException(
+//                 "AZURE_AI_ENDPOINT is not set. Run: dotnet user-secrets set \"AZURE_AI_ENDPOINT\" \"<your-endpoint>\"")),
+//         new ApiKeyCredential(
+//             config["AZURE_AI_KEY"]
+//             ?? throw new InvalidOperationException(
+//                 "AZURE_AI_KEY is not set. Run: dotnet user-secrets set \"AZURE_AI_KEY\" \"<your-key>\"")))
+//     .GetChatClient("o4-mini")     // deployment name
+//     .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────
 // Your first LLM call — identical regardless of which provider you chose.

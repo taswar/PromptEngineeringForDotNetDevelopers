@@ -452,7 +452,7 @@ var config = new ConfigurationBuilder()
 // ─────────────────────────────────────────────────────────────────
 IChatClient client = new OpenAIClient(
         new ApiKeyCredential("lm-studio"),
-        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:5000/v1") })
+        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
     .GetChatClient("microsoft/phi-4-mini-instruct")
     .AsIChatClient();
 

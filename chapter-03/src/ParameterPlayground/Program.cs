@@ -1,6 +1,7 @@
 #nullable enable
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
+using Azure.AI.OpenAI;
 using OpenAI;
 using System.ClientModel;
 
@@ -19,11 +20,11 @@ var config = new ConfigurationBuilder()
 //
 // The ApiKeyCredential value doesn't matter — LM Studio ignores it.
 // ─────────────────────────────────────────────────────────────────
-IChatClient client = new OpenAIClient(
-        new ApiKeyCredential("lm-studio"),
-        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:5000/v1") })
-    .GetChatClient("microsoft/phi-4-mini-instruct")
-    .AsIChatClient();
+// IChatClient client = new OpenAIClient(
+//         new ApiKeyCredential("lm-studio"),
+//         new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
+//     .GetChatClient("microsoft/phi-4-mini-instruct")
+//     .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────
 // OPTION B: OpenAI API (cloud — costs money per call)
@@ -43,13 +44,16 @@ IChatClient client = new OpenAIClient(
 // dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://your-resource.services.ai.azure.com/models"
 // dotnet user-secrets set "AZURE_AI_KEY" "your-key-here"
 // ─────────────────────────────────────────────────────────────────
-// IChatClient client = new Azure.AI.Inference.ChatCompletionsClient(
-//         new Uri(config["AZURE_AI_ENDPOINT"]
-//             ?? throw new InvalidOperationException("Set AZURE_AI_ENDPOINT in user-secrets")),
-//         new Azure.AzureKeyCredential(
-//             config["AZURE_AI_KEY"]
-//                 ?? throw new InvalidOperationException("Set AZURE_AI_KEY in user-secrets")))
-//     .AsChatClient("gpt-4o");
+IChatClient client = new AzureOpenAIClient(
+        new Uri(config["AZURE_AI_ENDPOINT"]
+            ?? throw new InvalidOperationException(
+                "AZURE_AI_ENDPOINT is not set. Run: dotnet user-secrets set \"AZURE_AI_ENDPOINT\" \"<your-endpoint>\"")),
+        new ApiKeyCredential(
+            config["AZURE_AI_KEY"]
+            ?? throw new InvalidOperationException(
+                "AZURE_AI_KEY is not set. Run: dotnet user-secrets set \"AZURE_AI_KEY\" \"<your-key>\"")))
+    .GetChatClient("gpt-4o-mini")     // deployment name
+    .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────
 // The experiment

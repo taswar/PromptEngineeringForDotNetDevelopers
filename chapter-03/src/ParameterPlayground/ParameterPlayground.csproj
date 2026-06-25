@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="*-*" />
     <PackageReference Include="Microsoft.Extensions.AI.AzureAIInference" Version="*-*" />
     <PackageReference Include="Azure.AI.Inference" Version="*-*" />
+    <PackageReference Include="Azure.AI.OpenAI" Version="*-*" />                          <!-- AzureOpenAIClient for cognitiveservices.azure.com (Azure OpenAI) resources -->
     <!--
       IConfiguration reads user-secrets in dev and environment variables in CI/CD.
       Never hardcode API keys — use dotnet user-secrets set "KEY" "value"

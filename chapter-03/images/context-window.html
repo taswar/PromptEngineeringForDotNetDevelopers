@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Context Window</title>
+<script>
+  (() => {
+    const param = new URLSearchParams(window.location.search).get("scoutTheme");
+    const theme = param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+:root {
+  color-scheme: light;
+  --cp-bg: #f7f4ef;
+  --cp-surface: #ffffff;
+  --cp-border: #dedede;
+  --cp-text: #242424;
+  --cp-text-muted: #5c5c5c;
+  --cp-text-soft: #6f6f6f;
+  --cp-accent: #b11f4b;
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --cp-bg: #3d3b3a;
+  --cp-surface: #292929;
+  --cp-border: #474747;
+  --cp-text: #dedede;
+  --cp-text-muted: #919191;
+  --cp-text-soft: #b0b0b0;
+  --cp-accent: #fd8ea1;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Segoe UI", Aptos, Calibri, -apple-system, sans-serif;
+  background: var(--cp-bg);
+  color: var(--cp-text);
+  padding: 32px;
+}
+
+.diagram {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cp-text-muted);
+  margin-bottom: 16px;
+}
+
+/* Outer window box */
+.window-box {
+  border: 2px solid var(--cp-border);
+  border-radius: 12px;
+  background: var(--cp-surface);
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.window-header {
+  background: var(--cp-bg);
+  border-bottom: 1px solid var(--cp-border);
+  padding: 10px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.window-header-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cp-text-muted);
+}
+.window-header-limit {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--cp-text);
+  background: #fff3;
+  padding: 2px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--cp-border);
+}
+html[data-theme="dark"] .window-header-limit { background: #ffffff14; }
+
+/* Stacked segments */
+.segments {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.segment {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--cp-border);
+}
+.segment:last-child { border-bottom: none; }
+
+.seg-bar {
+  width: 8px;
+  flex-shrink: 0;
+}
+.seg-body {
+  flex: 1;
+  padding: 14px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.seg-right {
+  text-align: right;
+  padding: 14px 18px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.seg-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.seg-content {}
+.seg-label {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+.seg-desc {
+  font-size: 12px;
+  color: var(--cp-text-muted);
+  line-height: 1.5;
+}
+.seg-tokens {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.seg-note {
+  font-size: 11px;
+  color: var(--cp-text-soft);
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+/* Colour per segment */
+.seg--system .seg-bar  { background: #1565c0; }
+.seg--system .seg-label { color: #1565c0; }
+.seg--system .seg-tokens { color: #1565c0; }
+html[data-theme="dark"] .seg--system .seg-bar   { background: #5c9ef5; }
+html[data-theme="dark"] .seg--system .seg-label { color: #5c9ef5; }
+html[data-theme="dark"] .seg--system .seg-tokens { color: #5c9ef5; }
+
+.seg--history .seg-bar  { background: #e65100; }
+.seg--history .seg-label { color: #e65100; }
+.seg--history .seg-tokens { color: #e65100; }
+html[data-theme="dark"] .seg--history .seg-bar   { background: #ff8c42; }
+html[data-theme="dark"] .seg--history .seg-label { color: #ff8c42; }
+html[data-theme="dark"] .seg--history .seg-tokens { color: #ff8c42; }
+
+.seg--user .seg-bar  { background: #2e7d32; }
+.seg--user .seg-label { color: #2e7d32; }
+.seg--user .seg-tokens { color: #2e7d32; }
+html[data-theme="dark"] .seg--user .seg-bar   { background: #66bb6a; }
+html[data-theme="dark"] .seg--user .seg-label { color: #66bb6a; }
+html[data-theme="dark"] .seg--user .seg-tokens { color: #66bb6a; }
+
+.seg--response .seg-bar  { background: var(--cp-border); }
+.seg--response .seg-label { color: var(--cp-text-soft); }
+.seg--response .seg-tokens { color: var(--cp-text-soft); }
+
+/* Budget bar */
+.budget-bar-wrap {
+  padding: 14px 18px 18px;
+  border-top: 1px solid var(--cp-border);
+  background: var(--cp-bg);
+}
+.budget-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--cp-text-muted);
+  margin-bottom: 8px;
+}
+.budget-bar {
+  height: 16px;
+  border-radius: 8px;
+  background: var(--cp-border);
+  overflow: hidden;
+  display: flex;
+  position: relative;
+}
+.budget-fill {
+  height: 100%;
+  display: flex;
+  border-radius: 0;
+}
+.bf-system   { width: 15%; background: #1565c0; }
+.bf-history  { width: 30%; background: #e65100; }
+.bf-user     { width: 5%;  background: #2e7d32; }
+.bf-response { width: 50%; background: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 6px); border: 1px dashed var(--cp-border); }
+
+html[data-theme="dark"] .bf-system  { background: #5c9ef5; }
+html[data-theme="dark"] .bf-history { background: #ff8c42; }
+html[data-theme="dark"] .bf-user    { background: #66bb6a; }
+
+.budget-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.bl-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--cp-text-muted);
+}
+.bl-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.warning-note {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(177,31,75,0.07);
+  border-left: 3px solid var(--cp-accent);
+  font-size: 12px;
+  color: var(--cp-text);
+  line-height: 1.5;
+}
+html[data-theme="dark"] .warning-note { background: rgba(253,142,161,0.10); }
+</style>
+</head>
+<body>
+<div class="diagram">
+  <div class="title">What Fills the Context Window</div>
+
+  <div class="window-box">
+    <div class="window-header">
+      <span class="window-header-label">Token Budget</span>
+      <span class="window-header-limit">e.g. 128,000 tokens total</span>
+    </div>
+
+    <div class="segments">
+
+      <div class="segment seg--system">
+        <div class="seg-bar"></div>
+        <div class="seg-body">
+          <div class="seg-icon">⚙️</div>
+          <div class="seg-content">
+            <div class="seg-label">System Prompt</div>
+            <div class="seg-desc">Your instructions, persona, and rules. Sent on every call — even when the user message is one line. A 1,500-word system prompt costs 2,000 tokens every single time.</div>
+          </div>
+        </div>
+        <div class="seg-right">
+          <div class="seg-tokens">~200 tok</div>
+          <div class="seg-note">fixed per session</div>
+        </div>
+      </div>
+
+      <div class="segment seg--history">
+        <div class="seg-bar"></div>
+        <div class="seg-body">
+          <div class="seg-icon">💬</div>
+          <div class="seg-content">
+            <div class="seg-label">Conversation History</div>
+            <div class="seg-desc">Every previous User + Assistant message pair. Grows with each turn. You must send it explicitly — the model has no memory between calls.</div>
+          </div>
+        </div>
+        <div class="seg-right">
+          <div class="seg-tokens">~400 tok</div>
+          <div class="seg-note">grows each turn</div>
+        </div>
+      </div>
+
+      <div class="segment seg--user">
+        <div class="seg-bar"></div>
+        <div class="seg-body">
+          <div class="seg-icon">✏️</div>
+          <div class="seg-content">
+            <div class="seg-label">Current User Message</div>
+            <div class="seg-desc">Your new prompt — the question, code, or document you're sending right now.</div>
+          </div>
+        </div>
+        <div class="seg-right">
+          <div class="seg-tokens">~50 tok</div>
+          <div class="seg-note">this call only</div>
+        </div>
+      </div>
+
+      <div class="segment seg--response">
+        <div class="seg-bar"></div>
+        <div class="seg-body">
+          <div class="seg-icon">🤖</div>
+          <div class="seg-content">
+            <div class="seg-label">Response Budget</div>
+            <div class="seg-desc">Tokens remaining for the model's answer. As conversation history grows, this shrinks. When it hits zero — or the context ceiling — the model stops or silently drops old messages.</div>
+          </div>
+        </div>
+        <div class="seg-right">
+          <div class="seg-tokens">remaining</div>
+          <div class="seg-note">shrinks over time</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="budget-bar-wrap">
+      <div class="budget-label">Token budget at a glance</div>
+      <div class="budget-bar">
+        <div class="budget-fill">
+          <div class="bf-system"></div>
+          <div class="bf-history"></div>
+          <div class="bf-user"></div>
+          <div class="bf-response"></div>
+        </div>
+      </div>
+      <div class="budget-legend">
+        <div class="bl-item"><div class="bl-dot" style="background:#1565c0"></div> System prompt</div>
+        <div class="bl-item"><div class="bl-dot" style="background:#e65100"></div> Conversation history</div>
+        <div class="bl-item"><div class="bl-dot" style="background:#2e7d32"></div> User message</div>
+        <div class="bl-item"><div class="bl-dot" style="background:var(--cp-border);border:1px dashed #999"></div> Response budget</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="warning-note">
+    ⚠️ <strong>The silent truncation trap:</strong> Most APIs don't throw when you hit the limit — they silently drop the oldest messages. Your chat app "forgets" the start of the conversation with no error, no warning. Track your token budget explicitly for anything beyond a few turns.
+  </div>
+</div>
+</body>
+</html>

@@ -99,7 +99,7 @@ Every model has a **context window** — the maximum number of tokens it can pro
 | 1M tokens | Gemini 1.5 Pro / 2.0 Flash, GPT-4.1 (extended) | Long enough for entire codebases |
 | 2M+ tokens | Gemini 2.5 Pro | Outlier — useful for very large documents |
 
-> 💡 **For this book:** LM Studio local models typically have 8K–32K context windows depending on the model. GPT-4o and Claude 3.5+ in the cloud give you 128K–200K. Don't spend energy worrying about limits until you hit them — but know the wall exists.
+> 💡 **For this book:** LM Studio local models typically have 8K–32K context windows depending on the model. GPT-4o and Claude 3.5+ in the cloud give you 128K–200K. Don't spend energy worrying about limits until you hit them — but know the wall exists. 
 
 When you hit the limit, one of two things happens — and neither is great:
 1. The API returns an error (the better outcome — at least you know)
@@ -109,7 +109,7 @@ We'll explore context windows properly in Section 3.3.
 
 ### Counting tokens in C#
 
-If you need exact token counts in C#, the `TiktokenSharp` NuGet package implements OpenAI's tokenisation algorithm. It's useful for building systems that need to stay within budgets, but it's a tangent for now. The `word × 1.33` estimate is good enough for everything in this book.
+If you need exact token counts in C#, the `TiktokenSharp` NuGet package implements OpenAI's tokenisation algorithm. It's useful for building systems that need to stay within budgets, but it's a tangent for now. The `word × 1.33` estimate is good enough for everything in this book. *You can also try out [https://platform.openai.com/tokenizer](https://platform.openai.com/tokenizer) by OpenAI where it shows the amount of tokens just by typing in the text*.
 
 ```csharp
 // TiktokenSharp — for when you need exact counts, not estimates
@@ -133,43 +133,7 @@ This is the single most common source of confusion for developers new to LLMs. "
 
 Every token in all of the following counts against your limit:
 
-```text
-┌─────────────────────────────────────────────────────────────┐
-│  Context Window  (e.g. 128K tokens)                         │
-│                                                             │
-│  ┌───────────────────┐                                      │
-│  │   System Prompt   │  ← Your instructions, persona, rules │
-│  ├───────────────────┤                                      │
-│  │  User message 1   │  ← Conversation history             │
-│  │  Assistant msg 1  │                                      │
-│  │  User message 2   │                                      │
-│  │  Assistant msg 2  │                                      │
-│  │  ...              │                                      │
-│  ├───────────────────┤                                      │
-│  │  Current user msg │  ← Your new prompt                  │
-│  ├───────────────────┤                                      │
-│  │  [Model response] │  ← Output also consumes tokens       │
-│  └───────────────────┘                                      │
-└─────────────────────────────────────────────────────────────┘
-```
-
-```mermaid
-flowchart LR
-    subgraph Window["◄── Token Budget Ceiling (e.g. 128K tokens) ──►"]
-        direction LR
-        SP["System Prompt\n~200 tok\n(fixed)"]
-        CH["Conversation History\n~400 tok\n(grows each turn)"]
-        UM["User Message\n~50 tok\n(current)"]
-        RB["Response Budget\n(remaining tokens)"]
-        SP --- CH --- UM --- RB
-    end
-    style SP fill:#1565c0,color:#fff,stroke:#0d47a1
-    style CH fill:#e65100,color:#fff,stroke:#bf360c
-    style UM fill:#2e7d32,color:#fff,stroke:#1b5e20
-    style RB fill:#f5f5f5,color:#555,stroke:#bdbdbd,stroke-dasharray:5 5
-```
-
-> _See [rendered PNG](images/context-window-light.png) for a colour-coded version. As conversation history grows, the Response Budget shrinks — until the API errors or silently drops the oldest messages._
+![What Fills the Context Window](images/context-window-light.png)
 
 A bloated system prompt is a hidden tax on every call. If your system prompt is 2,000 tokens (roughly 1,500 words — not unreasonable for a detailed set of instructions), you're spending 2,000 tokens before the user says anything, on every single call.
 

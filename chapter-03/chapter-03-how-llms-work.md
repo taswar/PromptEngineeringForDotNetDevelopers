@@ -454,7 +454,7 @@ var config = new ConfigurationBuilder()
 IChatClient client = new OpenAIClient(
         new ApiKeyCredential("lm-studio"),
         new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
-    .GetChatClient("microsoft/phi-4-mini-instruct")
+    .GetChatClient("microsoft/phi-4-mini-instruct") // we are using instruct here thus the response comes right back rather than resasoning
     .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────
@@ -481,7 +481,7 @@ IChatClient client = new OpenAIClient(
 //         new ApiKeyCredential(
 //             config["AZURE_AI_KEY"]
 //                 ?? throw new InvalidOperationException("Set AZURE_AI_KEY in user-secrets")))
-//     .GetChatClient("gpt-4o-mini")     // deployment name
+//     .GetChatClient("gpt-4o-mini")     // we are using gpt-4o-mini here becasue it supports temperature
 //     .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────

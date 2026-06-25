@@ -35,6 +35,7 @@ Passed!  - Failed: 0, Passed: 11, Skipped: 0, Total: 11
 ```bash
 # First: start LM Studio, load a model, click "Start Server"
 # Server must be running at http://localhost:1234/v1
+# (your port may differ — check LM Studio's server panel)
 
 dotnet test --filter "Category=Integration"
 ```
@@ -92,7 +93,7 @@ Tests the `IChatClient.GetResponseAsync()` call pattern using Moq. **Zero real n
 
 ### `IntegrationTests` — Live call across all temperatures (1 test, skips if offline)
 
-**Requires LM Studio running at `localhost:1234` with `microsoft/phi-4-mini-reasoning` loaded.**
+**Requires LM Studio running with `microsoft/phi-4-mini-instruct` (or another instruction-tuned model) loaded.**
 
 | Test | What it verifies |
 |---|---|

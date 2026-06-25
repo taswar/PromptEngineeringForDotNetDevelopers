@@ -15,7 +15,7 @@ Demonstrates how `Temperature`, `MaxOutputTokens`, and `StopSequences` affect LL
 1. Open LM Studio and download a model (Phi-4 Mini or similar — anything ≥ 3B parameters works)
 2. Go to the **Local Server** tab and load the model
 3. Start the server (it listens on port **1234** by default)
-4. Get the exact model ID from the server panel — it'll look like `microsoft/phi-4-mini-reasoning`
+4. Get the exact model ID from the server panel — it'll look like `microsoft/phi-4-mini-instruct`
 5. Update the model ID string in `Program.cs` to match
 
 ### Option B — OpenAI API
@@ -29,7 +29,7 @@ Uncomment Option B in `Program.cs` and comment out Option A.
 ### Option C — Azure AI Foundry
 
 ```bash
-dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://your-resource.services.ai.azure.com/models"
+dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://your-resource.cognitiveservices.azure.com"
 dotnet user-secrets set "AZURE_AI_KEY" "your-key-here"
 ```
 

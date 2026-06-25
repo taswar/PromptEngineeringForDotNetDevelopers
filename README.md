@@ -32,7 +32,7 @@ PromptEngineeringForDotNetDevelopers/
 
 ## Prerequisites
 
-- .NET 9 or later
+- .NET 10 or later
 - An IDE (Visual Studio 2022, VS Code with C# Dev Kit, or Rider)
 - Either: a free [LM Studio](https://lmstudio.ai) install **or** an OpenAI / Azure API key
 - A healthy scepticism of AI marketing copy

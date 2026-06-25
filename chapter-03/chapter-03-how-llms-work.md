@@ -181,7 +181,7 @@ This is the parameter every developer touches first, often without understanding
 
 **Sampling** is how the model picks its next token. Rather than always choosing the single most likely word, it draws probabilistically from a ranked list — giving less-likely tokens a chance to be selected. Temperature and Top-P both control how that draw is weighted.
 
-### What temperature is
+### What temperature is 🔥❄️🌨️
 
 When the model generates a response, it doesn't just deterministically output the single most likely next word. Internally, it computes a probability distribution over its entire vocabulary — every token it could possibly produce next, each with an associated probability score. Then it *samples* from that distribution.
 
@@ -387,11 +387,11 @@ This is why **temperature 0 is the starting point for anything where consistency
 A prompt that works perfectly on GPT-4o may need adjustment for Phi-4 Mini, and may need a rewrite for Llama 3.1. Models differ in:
 
 - Training data composition and cutoff date
-- Instruction-tuning methodology and RLHF choices
+- Instruction-tuning methodology and RLHF (Reinforcement Learning from Human Feedback) choices
 - Parameter count and architecture
 - Fine-tuning for specific tasks (coding, reasoning, safety)
 
-Prompts are not portable across models without testing. This is not a complaint — it's just how the technology works.
+Prompts are not portable across models without testing. This is not a complaint — it's just how the technology works. No different that the fact that not all SQL is portable to every single database.
 
 Here's a rough character sketch of the model families you're likely to use:
 

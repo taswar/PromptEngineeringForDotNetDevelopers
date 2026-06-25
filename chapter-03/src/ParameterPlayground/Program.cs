@@ -41,7 +41,7 @@ var config = new ConfigurationBuilder()
 // ─────────────────────────────────────────────────────────────────
 // OPTION C: Azure AI Foundry
 //
-// dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://your-resource.services.ai.azure.com/models"
+// dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://yourendpoint.cognitiveservices.azure.com"
 // dotnet user-secrets set "AZURE_AI_KEY" "your-key-here"
 // ─────────────────────────────────────────────────────────────────
 IChatClient client = new AzureOpenAIClient(

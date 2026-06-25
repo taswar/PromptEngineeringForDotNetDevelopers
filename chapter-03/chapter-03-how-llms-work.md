@@ -437,6 +437,7 @@ using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using OpenAI;
 using System.ClientModel;
+using Azure.AI.OpenAI;
 
 var config = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
@@ -471,16 +472,16 @@ IChatClient client = new OpenAIClient(
 // ─────────────────────────────────────────────────────────────────
 // OPTION C: Azure AI Foundry
 //
-// dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://your-resource.services.ai.azure.com/models"
+// dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://your-resource.cognitiveservices.azure.com"
 // dotnet user-secrets set "AZURE_AI_KEY" "your-key-here"
 // ─────────────────────────────────────────────────────────────────
-// IChatClient client = new Azure.AI.OpenAI.AzureOpenAIClient(
+// IChatClient client = new AzureOpenAIClient(
 //         new Uri(config["AZURE_AI_ENDPOINT"]
 //             ?? throw new InvalidOperationException("Set AZURE_AI_ENDPOINT in user-secrets")),
 //         new ApiKeyCredential(
 //             config["AZURE_AI_KEY"]
 //                 ?? throw new InvalidOperationException("Set AZURE_AI_KEY in user-secrets")))
-//     .GetChatClient("o4-mini")     // deployment name
+//     .GetChatClient("gpt-4o-mini")     // deployment name
 //     .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────

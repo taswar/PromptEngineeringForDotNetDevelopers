@@ -397,10 +397,10 @@ Here's a rough character sketch of the model families you're likely to use:
 
 | Model family | Strengths | Watch out for |
 |---|---|---|
-| GPT-4o (OpenAI) | Strong general reasoning, excellent code quality, reliable instruction-following, long context | Cost at scale; data privacy if not using Azure OpenAI |
+| GPT-4o / GPT-4.1 (OpenAI) | Strong general reasoning, excellent code quality, reliable instruction-following, long context | Cost at scale; data privacy if not using Azure OpenAI |
+| Claude Opus 4 (Anthropic) | Best-in-class for complex reasoning, nuanced instruction-following, and long-document analysis (200K context) | Higher cost than Sonnet-tier; check Azure/Bedrock availability for enterprise use |
 | Phi-4 Mini (Microsoft) | Fast, runs locally on modest hardware, good instruction-following for its size | Smaller context window; less world knowledge than frontier models |
 | Mistral 7B (Mistral AI) | Fast and lean; good for local deployment | Needs more explicit formatting instructions than commercial models; smaller world knowledge |
-| Mistral Small / Mixtral | Better instruction-following than 7B; strong at structured output | Still less polished than GPT-4o-class on complex multi-step reasoning |
 | Llama 3.1 / 3.2 (Meta) | Strong open-source baseline, good coding ability, runs well locally | Requires more explicit prompting structure than commercial models |
 
 > 📝 **Local vs cloud:** During development with LM Studio, you're testing against a specific local model. If your production target is GPT-4o or Claude, test against the production model before you ship. Phi-4 Mini is a good proxy for "will this prompt structure work?" — it's not a guarantee that the exact wording will transfer.

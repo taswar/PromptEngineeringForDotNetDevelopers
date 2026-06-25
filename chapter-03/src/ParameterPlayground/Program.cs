@@ -21,8 +21,8 @@ var config = new ConfigurationBuilder()
 // ─────────────────────────────────────────────────────────────────
 IChatClient client = new OpenAIClient(
         new ApiKeyCredential("lm-studio"),
-        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
-    .GetChatClient("microsoft/phi-4-mini-reasoning")
+        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:5000/v1") })
+    .GetChatClient("microsoft/phi-4-mini-instruct")
     .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────
@@ -74,8 +74,10 @@ foreach (var temp in temperatures)
     var options = new ChatOptions
     {
         Temperature = temp,
-        // MaxOutputTokens caps the response at roughly 75 words.
-        // The model doesn't know it's about to be cut off — it stops mid-token.
+        // MaxOutputTokens caps the response length. Keep this generous for
+        // REASONING models (e.g. phi-4-mini-reasoning): they spend tokens on
+        // hidden reasoning first, so a tiny cap (like 100) can get used up
+        // before any visible answer is produced — leaving response.Text empty.
         MaxOutputTokens = 100
     };
 
@@ -87,7 +89,25 @@ foreach (var temp in temperatures)
             CancellationToken.None);  // pass a real CancellationToken in ASP.NET/background services
 
         Console.WriteLine($"Temperature {temp:F1}:");
-        Console.WriteLine(response.Text);
+
+        // response.Text holds only the final answer (TextContent). Reasoning
+        // models emit separate reasoning parts that aren't in .Text. If the
+        // visible answer is empty, surface why instead of printing a blank line.
+        if (string.IsNullOrWhiteSpace(response.Text))
+        {
+            var reasoning = string.Concat(response.Messages
+                .SelectMany(m => m.Contents)
+                .OfType<TextReasoningContent>()
+                .Select(r => r.Text));
+
+            Console.WriteLine(string.IsNullOrWhiteSpace(reasoning)
+                ? $"[empty answer — finish reason: {response.FinishReason}]"
+                : $"[no final answer; model stopped while reasoning — finish reason: {response.FinishReason}]");
+        }
+        else
+        {
+            Console.WriteLine(response.Text);
+        }
     }
     catch (Exception ex)
     {

@@ -425,6 +425,8 @@ This is why teams building on top of LLMs should pin model versions where possib
 
 ### What to expect
 
+> 💡 **Model note:** The default model is `phi-4-mini-instruct` (an instruction-tuned model). If you switch to a *reasoning* model like `phi-4-mini-reasoning`, it spends tokens on hidden chain-of-thought before answering — a `MaxOutputTokens = 100` cap may be consumed entirely by reasoning, leaving `response.Text` empty. The code handles this gracefully with a fallback message.
+
 At T=0, the model gives a consistent, precise answer every time you run the app. At T=0.5, you'll see slight variations in phrasing between runs. At T=1.0, the outputs start to diverge — sometimes significantly. The same factual content, expressed differently each time.
 
 ```csharp
@@ -450,8 +452,8 @@ var config = new ConfigurationBuilder()
 // ─────────────────────────────────────────────────────────────────
 IChatClient client = new OpenAIClient(
         new ApiKeyCredential("lm-studio"),
-        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
-    .GetChatClient("microsoft/phi-4-mini-reasoning")
+        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:5000/v1") })
+    .GetChatClient("microsoft/phi-4-mini-instruct")
     .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────
@@ -472,13 +474,14 @@ IChatClient client = new OpenAIClient(
 // dotnet user-secrets set "AZURE_AI_ENDPOINT" "https://your-resource.services.ai.azure.com/models"
 // dotnet user-secrets set "AZURE_AI_KEY" "your-key-here"
 // ─────────────────────────────────────────────────────────────────
-// IChatClient client = new Azure.AI.Inference.ChatCompletionsClient(
+// IChatClient client = new Azure.AI.OpenAI.AzureOpenAIClient(
 //         new Uri(config["AZURE_AI_ENDPOINT"]
 //             ?? throw new InvalidOperationException("Set AZURE_AI_ENDPOINT in user-secrets")),
-//         new Azure.AzureKeyCredential(
+//         new ApiKeyCredential(
 //             config["AZURE_AI_KEY"]
 //                 ?? throw new InvalidOperationException("Set AZURE_AI_KEY in user-secrets")))
-//     .AsChatClient("gpt-4o");
+//     .GetChatClient("o4-mini")     // deployment name
+//     .AsIChatClient();
 
 // ─────────────────────────────────────────────────────────────────
 // The experiment: the same prompt, three different temperatures
@@ -500,17 +503,38 @@ foreach (var temp in temperatures)
     var options = new ChatOptions
     {
         Temperature = temp,
-        // MaxOutputTokens caps the response at roughly 75 words.
-        // The model doesn't know it's about to be cut off — it stops mid-token.
+        // MaxOutputTokens caps the response length. Keep this generous for
+        // REASONING models (e.g. phi-4-mini-reasoning): they spend tokens on
+        // hidden reasoning first, so a tiny cap (like 100) can get used up
+        // before any visible answer is produced — leaving response.Text empty.
         MaxOutputTokens = 100
     };
 
     var response = await client.GetResponseAsync(
         [new ChatMessage(ChatRole.User, prompt)],
-        options);
+        options,
+        CancellationToken.None);  // pass a real CancellationToken in ASP.NET/background services
 
     Console.WriteLine($"Temperature {temp:F1}:");
-    Console.WriteLine(response.Text);
+
+    // response.Text holds only the final answer (TextContent). Reasoning
+    // models emit separate reasoning parts that are not in .Text. If the
+    // visible answer is empty, surface why instead of printing a blank line.
+    if (string.IsNullOrWhiteSpace(response.Text))
+    {
+        var reasoning = string.Concat(response.Messages
+            .SelectMany(m => m.Contents)
+            .OfType<TextReasoningContent>()
+            .Select(r => r.Text));
+
+        Console.WriteLine(string.IsNullOrWhiteSpace(reasoning)
+            ? $"[empty answer — finish reason: {response.FinishReason}]"
+            : $"[no final answer; model stopped while reasoning — finish reason: {response.FinishReason}]");
+    }
+    else
+    {
+        Console.WriteLine(response.Text);
+    }
     Console.WriteLine();
 }
 

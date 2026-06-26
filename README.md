@@ -25,8 +25,22 @@ PromptEngineeringForDotNetDevelopers/
 │   │   └── HelloAI/                        ← LM Studio + OpenAI + Azure in one project
 │   └── tests/
 │       └── HelloAI.Tests/                  ← 11 unit tests + 1 integration test
-├── chapter-03/  (coming soon)
-├── chapter-04/  (coming soon)
+├── chapter-03/
+│   ├── chapter-03-how-llms-work.md                        ✅
+│   ├── images/
+│   │   ├── temperature-distribution-light.png
+│   │   └── context-window-light.png
+│   ├── src/
+│   │   └── ParameterPlayground/            ← Temperature / context window explorer
+│   └── tests/
+│       └── ParameterPlayground.Tests/      ← 11 unit tests
+├── chapter-04/
+│   ├── chapter-04-anatomy-of-a-great-prompt.md            ✅
+│   ├── src/
+│   │   └── PromptBuilder/                  ← Fluent 5-part prompt builder + code review demo
+│   └── tests/
+│       └── PromptBuilder.Tests/            ← 31 unit tests
+├── chapter-05/  (coming soon)
 └── ...
 ```
 
@@ -57,32 +71,25 @@ cd PromptEngineeringForDotNetDevelopers
 |---|---|---|---|
 | 1 | The .NET Developer's AI Landscape | ✅ Complete | LLMs, cost spectrum, Microsoft AI stack |
 | 2 | Setting Up Your AI Dev Environment | ✅ Complete | LM Studio, GGUF/quantisation, MEAI, OpenAI, Azure AI Foundry, IConfiguration secrets |
-| 3 | How LLMs Work (Just Enough Theory) | ⬜ Coming soon | Tokens, context window, temperature, `IChatClient` |
-| 4 | Anatomy of a Great Prompt | 🚧 Up next | 5-part prompt anatomy, two key principles, PromptBuilder |
-| 5 | Core Prompting Techniques | ⬜ Coming soon | Zero-shot, few-shot, chain-of-thought, self-consistency |
+| 3 | How LLMs Work (Just Enough Theory) | ✅ Complete | Tokens, context windows, temperature, model families, `IChatClient` |
+| 4 | Anatomy of a Great Prompt | ✅ Complete | 5-part prompt anatomy, two key principles, `PromptBuilder` fluent class |
+| 5 | Core Prompting Techniques | 🚧 Up next | Zero-shot, few-shot, chain-of-thought, self-consistency |
 | 6 | Structured Outputs and Advanced Patterns | ⬜ Coming soon | JSON mode, streaming, resilience, iterative refinement |
 | 7 | Prompt Patterns for Real Developer Workflows | ⬜ Coming soon | Code review, test generation, summarisation |
 
-## Quick Start: Run Chapter 2
+## Quick Start: Run Chapter 4
 
-The fastest way to get your first LLM call working:
+The fastest way to see `PromptBuilder` in action:
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/your-username/PromptEngineeringForDotNetDevelopers
-cd PromptEngineeringForDotNetDevelopers/chapter-02/src/HelloAI
+cd chapter-04/src/PromptBuilder
 
-# 2. Restore packages
-dotnet restore
-
-# 3. Edit Program.cs and choose your provider:
-#    - Option A (Free): Start LM Studio, load a model, click Start Server
-#    - Option B: Set OPENAI_API_KEY via dotnet user-secrets
-#    - Option C: Set AZURE_AI_ENDPOINT + AZURE_AI_KEY via dotnet user-secrets
-
-# 4. Run
+# Set your LM Studio model name (get it from GET http://localhost:1234/v1/models)
+# Then run:
 dotnet run
 ```
+
+Option A (LM Studio) is active by default. To use OpenAI or Azure AI Foundry, comment out Option A and uncomment your chosen block — instructions are in `Program.cs`.
 
 ## Running the Tests
 
@@ -90,8 +97,11 @@ dotnet run
 # Chapter 2 — unit tests (no LM Studio required)
 dotnet test chapter-02/tests/HelloAI.Tests --filter "Category!=Integration"
 
-# Chapter 2 — integration test (requires LM Studio at localhost:1234)
-dotnet test chapter-02/tests/HelloAI.Tests --filter "Category=Integration"
+# Chapter 3 — unit tests
+dotnet test chapter-03/tests/ParameterPlayground.Tests
+
+# Chapter 4 — unit tests (31 tests, no LM Studio required)
+dotnet test chapter-04/tests/PromptBuilder.Tests
 ```
 
 ## License

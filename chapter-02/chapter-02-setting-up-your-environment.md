@@ -419,6 +419,8 @@ Task<ChatResponse> GetResponseAsync(
 
 You send it a list of `ChatMessage` objects. Each message has a `ChatRole` — `User` for your input, `System` for instructions, `Assistant` for previous model responses. You get back a `ChatResponse`. The `response.Text` property is a convenience shortcut that returns the content of the first assistant message as a string.
 
+> 💡 **One list per task:** When you move to an unrelated task, create a new `List<ChatMessage>` rather than appending to the current one. Stale conversation history from a previous task is noise — the model may try to reconcile the old context with the new request, subtly degrading the response. Chapter 3 covers the full context window mechanics; for now: new task = new list.
+
 The concrete implementations — `OpenAIClient`, `AzureOpenAIClient` — each wrap their provider's SDK and translate `IChatClient` calls into the right HTTP requests. Your code never sees the wire format.
 
 > 📝 **Version note:** In MEAI 9.x, the method was `CompleteAsync` and returned `ChatCompletion`. In MEAI 10+, it's `GetResponseAsync` returning `ChatResponse`. If you're reading older samples online and they use `CompleteAsync`, that's why they look different. Use `GetResponseAsync` — it's the current API.

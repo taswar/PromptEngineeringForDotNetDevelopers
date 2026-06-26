@@ -43,7 +43,7 @@ What emerges from doing this with hundreds of billions of parameters and months 
 
 Not because it "understands" in the human sense. But because predicting what text *should* come next, given enough training data, ends up encoding a surprising amount of knowledge about how the world works.
 
-Think of an LLM as a **very well-read intern** who has absorbed the entire internet, every textbook, and most of GitHub — but has no memory of yesterday and occasionally makes things up with complete confidence.
+Think of an LLM as a **very well-read intern** who has absorbed the entire internet, every textbook, and most of GitHub — but has no memory of yesterday and occasionally makes things up with complete confidence. More precisely: a highly motivated fresh hire who knows an enormous amount about the world in general, but knows nothing specific about *you*, your codebase, your team's conventions, or your constraints — until you tell them. That's why context in your prompts does so much of the work.
 
 That last part is important. We'll come back to it.
 
@@ -224,6 +224,8 @@ Here's the maturity ladder this book follows:
 > 📝 **Note:** This book takes you from beginner to solid intermediate. The advanced tier (RAG, agents, MCP) is a natural next step once the prompting fundamentals are solid.
 
 By the end of this book, you'll be solidly at intermediate level — able to engineer reliable prompts for real production features.
+
+There's a simpler way to frame the difference this book aims to produce. AI *novices* use AI like a Google search — short prompts, simple questions, hoping the model fills in the blanks. AI *power users* give rich context, ask multi-step questions, upload documents, and tell the model to think hard before answering. The techniques in that table are the *mechanism*; power-user habits are the *mindset* that makes them effective. This book teaches both.
 
 ---
 

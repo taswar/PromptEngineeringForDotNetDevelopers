@@ -35,7 +35,7 @@ The same applies to LLMs. You don't need to know about transformer attention hea
 - A fine-tuning guide
 - A maths-heavy deep-dive into probability distributions
 
-If you want those things, Andrej Karpathy's YouTube channel is excellent. That's not this book.
+If you want those things, Andrej Karpathy's YouTube channel is excellent. That's not this book. Who is Andrej Karpathy you may ask? **Andrej Karpathy** is a prominent Slovak-Canadian AI researcher and educator, best known as a co-founder of OpenAI and the former Director of AI at Tesla. Google him up and follow his talks and youtube if you are into learning more about AI etc. Now let's get back to this book.....
 
 **What this chapter IS:**
 
@@ -129,6 +129,8 @@ A C# method doesn't "remember" what happened last time you called it (unless you
 
 This is the single most common source of confusion for developers new to LLMs. "It forgot what I said three messages ago." Yes. Because you didn't include those messages in the current call. Let's look at what actually goes into the context window.
 
+> 💡 **Scale check:** Human working memory holds roughly 7 items at a time. Leading AI models today accept around **750,000 words of context** — roughly the first four or five Harry Potter books. Most developers dramatically underestimate how much context they can provide, and under-prompt as a result.
+
 ### What fills the context window
 
 Every token in all of the following counts against your limit:
@@ -156,6 +158,8 @@ var response = await client.GetResponseAsync(messages);
 ```
 
 In a real chat application, you'd append each new user message and each new assistant response to this list, then send the full list every time. The model isn't keeping a transcript — you are.
+
+> 💡 **When to reset your conversation:** If you're moving to an unrelated task, start a new `List<ChatMessage>` rather than appending to the existing one. Your previous discussion about null-safety review is noise when you now want to generate documentation — the model tries to reconcile the old context with the new request, which can subtly degrade responses. Clearing the list is the API equivalent of opening a new chat tab. A good rule: one `List<ChatMessage>` per coherent task.
 
 ### The "lost in the middle" problem
 
@@ -397,11 +401,15 @@ Here's a rough character sketch of the model families you're likely to use:
 
 | Model family | Strengths | Watch out for |
 |---|---|---|
-| GPT-4o / GPT-4.1 (OpenAI) | Strong general reasoning, excellent code quality, reliable instruction-following, long context | Cost at scale; data privacy if not using Azure OpenAI |
-| Claude Opus 4 (Anthropic) | Best-in-class for complex reasoning, nuanced instruction-following, and long-document analysis (200K context) | Higher cost than Sonnet-tier; check Azure/Bedrock availability for enterprise use |
+| GPT-4o / GPT-4.1/ GPT-5 (OpenAI) | Strong general reasoning, excellent code quality, reliable instruction-following, long context | Cost at scale; data privacy if not using Azure OpenAI |
+| Claude Opus 4 / Fable 5 (Anthropic) | Best-in-class for complex reasoning, nuanced instruction-following, and long-document analysis (200K context) | Higher cost than Sonnet-tier; check Azure/Bedrock availability for enterprise use |
 | Phi-4 Mini (Microsoft) | Fast, runs locally on modest hardware, good instruction-following for its size | Smaller context window; less world knowledge than frontier models |
 | Mistral 7B (Mistral AI) | Fast and lean; good for local deployment | Needs more explicit formatting instructions than commercial models; smaller world knowledge |
 | Llama 3.1 / 3.2 (Meta) | Strong open-source baseline, good coding ability, runs well locally | Requires more explicit prompting structure than commercial models |
+
+> 📝 **Jagged intelligence:** Andrew Ng coined this phrase to describe an important property of AI models — they exceed human capability on some tasks (parsing thousands of documents in seconds, solving tricky maths problems, finding obscure API patterns) while falling short on others (fine-grained visual detail, spatial reasoning, tasks requiring physical-world common sense). Critically, different models are jagged in *different ways* — GPT-4o might outperform Claude on a coding task while Claude outperforms it on a legal analysis. This is why the advice "just use the best model" oversimplifies: test your specific task against your candidate models.
+
+> 📝 **Reliability correlates with internet coverage:** AI reliability on a topic scales roughly with how much text about that topic exists on the internet. Common frameworks, popular algorithms, well-documented APIs → the model has seen millions of examples and is likely reliable. Niche libraries, internal domain knowledge, proprietary protocols → the model has seen few or zero examples and may confabulate confidently. When reliability matters, supply the facts yourself via context rather than relying on pretrained knowledge.
 
 > 📝 **Local vs cloud:** During development with LM Studio, you're testing against a specific local model. If your production target is GPT-4o or Claude, test against the production model before you ship. Phi-4 Mini is a good proxy for "will this prompt structure work?" — it's not a guarantee that the exact wording will transfer.
 
@@ -425,7 +433,13 @@ This is why teams building on top of LLMs should pin model versions where possib
 
 ### What to expect
 
-> 💡 **Model note:** The default model is `phi-4-mini-instruct` (an instruction-tuned model). If you switch to a *reasoning* model like `phi-4-mini-reasoning`, it spends tokens on hidden chain-of-thought before answering — a `MaxOutputTokens = 100` cap may be consumed entirely by reasoning, leaving `response.Text` empty. The code handles this gracefully with a fallback message.
+> 💡 **Model note:** The default LM Studio model for this test will be `phi-4-mini-instruct` (an instruction-tuned model). If you switch to a *reasoning* model like `phi-4-mini-reasoning`, it spends tokens on hidden chain-of-thought before answering — a `MaxOutputTokens = 100` cap may be consumed entirely by reasoning, leaving `response.Text` empty. The code handles this gracefully with a fallback message.
+>
+> **How reasoning models work:** A standard instruction-tuned model streams tokens directly as output. A reasoning model adds an internal loop first:
+>
+> **Prompt → Think (hidden) → [optionally: use tool → Think more] → Answer**
+>
+> The "thinking" tokens are generated internally but don't appear in `response.Text` — in MEAI they surface as `TextReasoningContent` objects in `response.Contents`. This loop can cycle multiple times (think → search/read → think → answer) for complex tasks, which is why reasoning models take longer but produce more reliable outputs on hard problems. The practical implication: tell a reasoning model to **`"think hard"`** rather than spelling out step-by-step instructions — the model engages its reasoning loop automatically. Some models also respond to the keyword **`ultrathink`** for maximum reasoning effort. Research by METR (2024–2025) found that modern reasoning models can now successfully complete tasks that would take a skilled human many hours — a useful calibration for what you can reasonably ask a reasoning model to do.
 
 At T=0, the model gives a consistent, precise answer every time you run the app. At T=0.5, you'll see slight variations in phrasing between runs. At T=1.0, the outputs start to diverge — sometimes significantly. The same factual content, expressed differently each time.
 

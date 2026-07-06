@@ -59,7 +59,7 @@ IChatClient client = new OpenAIClient(
 
 // Set to true to run the 5× self-consistency check at the end.
 // It makes 5 additional API calls at temperature 0.7 and adds ~30 seconds.
-const bool RunSelfConsistency = true;
+const bool RunSelfConsistency = false;
 
 var options = new ChatOptions { Temperature = 0f, MaxOutputTokens = 1024 };
 

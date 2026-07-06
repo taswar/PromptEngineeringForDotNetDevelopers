@@ -73,8 +73,8 @@ cd PromptEngineeringForDotNetDevelopers
 | 2 | Setting Up Your AI Dev Environment | ✅ Complete | LM Studio, GGUF/quantisation, MEAI, OpenAI, Azure AI Foundry, IConfiguration secrets |
 | 3 | How LLMs Work (Just Enough Theory) | ✅ Complete | Tokens, context windows, temperature, model families, `IChatClient` |
 | 4 | Anatomy of a Great Prompt | ✅ Complete | 5-part prompt anatomy, two key principles, `PromptBuilder` fluent class |
-| 5 | Core Prompting Techniques | 🚧 Up next | Zero-shot, few-shot, chain-of-thought, self-consistency |
-| 6 | Structured Outputs and Advanced Patterns | ⬜ Coming soon | JSON mode, streaming, resilience, iterative refinement |
+| 5 | Core Prompting Techniques | ✅ Complete | Zero-shot, few-shot, CoT, self-consistency, sycophancy, rubric-based prompting |
+| 6 | Structured Outputs and Advanced Patterns | 🚧 Up next | JSON mode, streaming, resilience, iterative refinement |
 | 7 | Prompt Patterns for Real Developer Workflows | ⬜ Coming soon | Code review, test generation, summarisation |
 
 ## Quick Start: Run Chapter 4

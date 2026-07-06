@@ -35,7 +35,16 @@ IChatClient client = new OpenAIClient(
     .GetChatClient("microsoft/phi-4-mini-instruct")
     .AsIChatClient();
 
-// Option B: Azure AI Foundry (uncomment to use, comment out Option A above)
+
+// ── Option B: OpenAI API ──────────────────────────────────────────────────────
+// dotnet user-secrets set "OPENAI_API_KEY" "sk-..."
+// IChatClient client = new OpenAIClient(
+//         new ApiKeyCredential(config["OPENAI_API_KEY"]
+//             ?? throw new InvalidOperationException("OPENAI_API_KEY not set")))
+//     .GetChatClient("gpt-4o-mini")
+//     .AsIChatClient();
+
+// Option C: Azure AI Foundry (uncomment to use, comment out Option A above)
 // Set secrets first:
 //   dotnet user-secrets set "AzureAI:Endpoint" "https://YOUR-ENDPOINT.openai.azure.com"
 //   dotnet user-secrets set "AzureAI:Key"      "your-key-here"
@@ -43,14 +52,14 @@ IChatClient client = new OpenAIClient(
 // IChatClient client = new AzureOpenAIClient(
 //         new Uri(config["AzureAI:Endpoint"]!),
 //         new ApiKeyCredential(config["AzureAI:Key"]!))
-//     .GetChatClient("gpt-4o")
+//     .GetChatClient("gpt-4o-mini")
 //     .AsIChatClient();
 
 // ─── Settings ─────────────────────────────────────────────────────────────────
 
 // Set to true to run the 5× self-consistency check at the end.
 // It makes 5 additional API calls at temperature 0.7 and adds ~30 seconds.
-const bool RunSelfConsistency = false;
+const bool RunSelfConsistency = true;
 
 var options = new ChatOptions { Temperature = 0f, MaxOutputTokens = 1024 };
 

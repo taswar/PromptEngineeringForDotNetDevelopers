@@ -20,7 +20,7 @@ That someone is you.
 
 Welcome to the book that's not going to tell you that AI will replace your job. It's going to help you use AI to do your job better — and to build features that weren't worth the cost or engineering effort before LLMs became accessible.
 
-Also: this book is in C#. No Python. No "just install Conda and then pip install twelve things that may or may not conflict." Just `dotnet new console` and we're off.
+Also: this book is in C#. No Python. No "install Conda and then pip install twelve things that may or may not conflict." No node.js or npm hell, just `dotnet new console` and we're off.
 
 ---
 
@@ -32,7 +32,7 @@ A **Large Language Model (LLM)** is a neural network trained on a massive amount
 
 That's it. That's the core trick. Predict the next token, over and over, at scale.
 
-What emerges from doing this with hundreds of billions of parameters and months of compute is a model that can:
+Train at that scale and something unexpected falls out. A model that can:
 
 - Answer questions
 - Write and explain code
@@ -40,6 +40,8 @@ What emerges from doing this with hundreds of billions of parameters and months 
 - Translate languages
 - Follow complex instructions
 - Reason through multi-step problems
+
+That is a surprisingly large amount of capability from one training objective.
 
 Not because it "understands" in the human sense. But because predicting what text *should* come next, given enough training data, ends up encoding a surprising amount of knowledge about how the world works.
 
@@ -82,7 +84,7 @@ Output: "The capital of France is Paris."
 
 These are the models you'll use from C#: GPT-4o, Claude, Llama 3, Mistral, Phi-4. They're designed to respond to system prompts, user messages, and to behave helpfully and (mostly) safely.
 
-When you call `IChatClient.GetResponseAsync()` in .NET, you're always talking to an instruction-tuned model. The distinction matters because it explains *why* your prompts work the way they do — and why structure and clarity in your instructions make such a difference.
+When you call `IChatClient.GetResponseAsync()` in .NET, you are always talking to an instruction-tuned model. That is why structure and clarity in your prompts make such a difference. The model is wired to follow instructions — so give it good ones.
 
 ---
 
@@ -159,19 +161,32 @@ MEAI is what this book is built on. Every code example uses it. Think of it as t
 
 ### Microsoft Agent Framework
 
-Microsoft Agent Framework is the layer above MEAI that handles **AI agents**: systems that can use tools, maintain memory, plan multi-step tasks, and coordinate with other agents. It's the unification of Semantic Kernel and AutoGen into a single, coherent SDK.
+Microsoft Agent Framework is the layer above MEAI. It handles the harder problems:
 
-In this book, we'll give you enough prompt engineering foundations that when you get there, you're not fighting the model — you're directing it.
+- **Tools** — the model can call functions in your code
+- **Memory** — persistence across turns and sessions
+- **Multi-step planning** — the model decides what to do next
+- **Multi-agent coordination** — agents talking to other agents
+
+It unifies Semantic Kernel and AutoGen into one SDK. That is a different class of problem from prompt engineering, and it is outside this book.
 
 ### Azure AI Foundry
 
-Azure AI Foundry is Microsoft's cloud platform for deploying, monitoring, and governing AI models at enterprise scale. It handles model deployment, safety filtering, usage monitoring, evaluation pipelines, and integration with the rest of the Azure ecosystem.
+Azure AI Foundry is Microsoft's cloud platform for enterprise AI. It handles:
+
+- Model deployment and hosting
+- Safety filtering
+- Usage monitoring and cost tracking
+- Evaluation pipelines
+- Integration with the Azure ecosystem
+
+For this book, it is one of three ways to get an `IChatClient`. 
 
 ---
 
 ## 1.6 Why C# Is Great for AI Application Development
 
-Here's the thing: **you're not training models**. You're *calling* them. And for that, C# has everything you need — plus a few advantages Python doesn't.
+Here's the thing: **you're not training models**. You're *calling* them. And for that, C# has everything you need — plus a few advantages Python doesn't. (Static Typing, Superior Tooling, Performance, Language features, etc)
 
 When you call `IChatClient.GetResponseAsync()`, you're making an HTTP request to an API and parsing JSON. The LLM itself is running somewhere else — on your local GPU via LM Studio, on OpenAI's servers, or in Azure. Your C# code is the client, not the runtime.
 
@@ -187,7 +202,7 @@ Microsoft has invested significantly in first-class .NET AI support:
 | Dependency injection | Built into .NET — better than most Python DI |
 | Logging & telemetry | `ILogger`, OpenTelemetry — already in your app |
 
-The ecosystem is genuinely good. And you get to keep all the things you already know: LINQ, async/await, strong typing, proper dependency injection, and the ability to actually refactor your code without playing a game of "which dict key is it this time."
+The ecosystem is genuinely good. Honestly, you get to keep everything you already know: LINQ, async/await, strong typing, proper dependency injection, and the ability to actually refactor your code without playing a game of "which dict key is it this time."
 
 ---
 
@@ -225,7 +240,11 @@ Here's the maturity ladder this book follows:
 
 By the end of this book, you'll be solidly at intermediate level — able to engineer reliable prompts for real production features.
 
-There's a simpler way to frame the difference this book aims to produce. AI *novices* use AI like a Google search — short prompts, simple questions, hoping the model fills in the blanks. AI *power users* give rich context, ask multi-step questions, upload documents, and tell the model to think hard before answering. The techniques in that table are the *mechanism*; power-user habits are the *mindset* that makes them effective. This book teaches both.
+AI novices use it like a Google search. Short prompts, vague questions, hoping the model fills in the blanks.
+
+Power users give rich context, ask in steps, and tell the model how to think.
+
+Honestly, the difference is mostly habit. The techniques in that table are the mechanism. This book gives you both.
 
 ---
 
@@ -241,7 +260,7 @@ This matters for C# developers because:
 2. **Your users will trust it.** If it's in your application, it has your credibility.
 3. **You need to design for it.** Structured outputs, grounding with real data (RAG), and validation all help.
 
-We'll cover mitigation patterns throughout the book. For now, just keep the rule of thumb: **verify anything the model tells you about facts, APIs, or the external world.** Use it for reasoning, transformation, and generation — but keep humans (or hard validation) in the loop for facts.
+We'll cover mitigation patterns throughout the book. For now, keep one rule: **verify anything the model tells you about facts, APIs, or the external world.** Use it for reasoning, transformation, and generation — but keep humans (or hard validation) in the loop for facts.
 
 ---
 
@@ -318,9 +337,7 @@ Here's what to take from this chapter:
 
 ## Up Next: Chapter 2 — Setting Up Your AI Development Environment
 
-In Chapter 2, we install LM Studio, download a local model, set up the NuGet packages, and write your first `IChatClient.GetResponseAsync()` call — hitting all three backends (local, OpenAI, Azure) with the same C# code. No API key required to get started.
-
-See you there.
+In Chapter 2, we install LM Studio, download a local model, set up the NuGet packages, and write your first `IChatClient.GetResponseAsync()` call — hitting all three backends (local, OpenAI, Azure) with the same C# code. No API key required to get started. If you have a GPU with 4 GB of VRAM, you can do the whole next chapter without spending a cent. Let's go. 🙂
 
 ---
 

@@ -65,7 +65,7 @@ Both need to be running for the code to work. This is the source of 90% of "why 
 
 ### Picking a Model
 
-Models in LM Studio come as GGUF files. Before you pick one, here's a quick decoder for the naming system you'll see everywhere:
+Models in LM Studio come as GGUF files. The naming system looks intimidating at first. Here's a decoder — you will refer back to this when picking models outside this book too.
 
 > 📖 **Decoding model filenames**
 >
@@ -132,7 +132,7 @@ Search for your chosen model in LM Studio's discovery panel and download it. Thi
 
 ### Starting the Local Server
 
-In LM Studio, go to **Local Server** (the icon looks like terminal 🖥️ in the left sidebar, depending on which version you have installed). Load the model you downloaded, then click **Start Server**, which can be next to the Status toggle button. (If it runs it will turn green).
+In LM Studio, open the **Local Server** panel — it is the terminal icon in the left sidebar. Load the model you downloaded. Click **Start Server**. When it is running, the status indicator turns green.
 
 The server binds to port **1234** by default and exposes an OpenAI-compatible REST API at `http://localhost:1234/v1`.
 
@@ -175,7 +175,7 @@ Use the `"id"` value. That exact string goes into your `GetChatClient()` call. I
 
 ## 2.3 Path B: OpenAI API
 
-If you don't want to deal with local hardware or the model is too large for your machine, OpenAI's API is the fastest path to a working setup.
+Not everyone has a GPU. OpenAI's API is the fastest path to a working setup — no local hardware, no downloads.
 
 ### Getting an API Key
 
@@ -211,7 +211,7 @@ flowchart LR
 
 ### Which Model to Use
 
-Use `gpt-4o-mini` for this book. It's cheap, fast, and capable enough for everything you'll do here. `gpt-4o` is more powerful but costs roughly 15× more per token — you don't need it while learning.
+Use `gpt-4o-mini` for this book. It is what I used to test every example in these chapters. Fast, inexpensive, and it does not waste tokens being polite. `gpt-4o` is more powerful but costs roughly 15× more per token — you do not need it while learning.
 
 > 📝 **On pricing and rate limits:**
 > OpenAI charges per token — roughly $0.15 per million input tokens for `gpt-4o-mini`. For the examples in this book, you'll spend a few cents total. Rate limits on new accounts are conservative; if you hit a 429, wait a moment and retry. Chapter 6 covers resilience patterns for production.
@@ -220,12 +220,16 @@ Use `gpt-4o-mini` for this book. It's cheap, fast, and capable enough for everyt
 
 ## 2.4 Path C: Azure AI Foundry
 
-Azure AI Foundry is Microsoft's cloud platform for deploying, monitoring, and governing AI models at scale. For the purpose of this chapter, "at scale" means you're connecting to a GPT-4o model hosted in Azure rather than on OpenAI's infrastructure directly. Same family of models, different billing relationship and different endpoint URL.
+Azure AI Foundry is Microsoft's cloud platform for enterprise AI.
+
+For this chapter, that means one practical thing: a GPT-4o model running in Azure instead of on OpenAI's servers directly. Same model family. Different endpoint. Different bill.
 
 You'd choose this path if:
 - Your organisation has Azure credits or an Enterprise Agreement
 - You need models to run within a specific Azure region for compliance
 - You're eventually heading toward Azure AI Foundry's monitoring, evaluation, or PromptOps features
+
+If your organisation is already on Azure, this path will feel familiar. The setup takes about ten minutes and everything else in the code is identical to Path A.
 
 ### Setting Up
 
@@ -234,7 +238,7 @@ You'd choose this path if:
 3. In the project, go to **Deployments** and deploy a model — GPT-4o-mini is the recommended choice due to price, but feel free to deploy a different model
 5. Copy the **Endpoint URL** and **Key** from the deployment page — or use Managed Identities if your policy requires it.
 
-> ⚠️ **Use the base URL only — no path suffix.** The SDK client appends the path automatically (e.g. `/openai/deployments/<name>/chat/completions`). If you copy the full URL with `/chat/completions` already appended, you'll get a doubled path and a 404. The endpoint should look like: `https://your-resource.cognitiveservices.azure.com`
+> ⚠️ **Base URL only — do not include the path.** The SDK appends `/openai/deployments/<name>/chat/completions` itself. If you paste the full URL from the portal with `/chat/completions` already at the end, you get a doubled path and a 404. I have wasted 20 minutes on this. You do not need to. The endpoint should look like: `https://your-resource.cognitiveservices.azure.com`
 
 Store them as user-secrets:
 
@@ -417,7 +421,15 @@ Task<ChatResponse> GetResponseAsync(
     CancellationToken cancellationToken = default);
 ```
 
-You send it a list of `ChatMessage` objects. Each message has a `ChatRole` — `User` for your input, `System` for instructions, `Assistant` for previous model responses. You get back a `ChatResponse`. The `response.Text` property is a convenience shortcut that returns the content of the first assistant message as a string.
+You send it a list of `ChatMessage` objects. Each message has a `ChatRole`:
+
+- `User` — your input to the model
+- `System` — instructions that shape the model's behaviour
+- `Assistant` — previous model responses (for multi-turn conversations)
+
+You get back a `ChatResponse`. `response.Text` is the shortcut — it returns the content of the first assistant message as a string.
+
+That is the whole interface. One method in, one response out.
 
 > 💡 **One list per task:** When you move to an unrelated task, create a new `List<ChatMessage>` rather than appending to the current one. Stale conversation history from a previous task is noise — the model may try to reconcile the old context with the new request, subtly degrading the response. Chapter 3 covers the full context window mechanics; for now: new task = new list.
 
@@ -433,6 +445,8 @@ Two small method calls do the translation work:
 - `.AsIChatClient()` — an extension method that wraps the provider-specific client in the `IChatClient` interface
 
 For Azure, `AzureOpenAIClient.GetChatClient("deployment-name").AsIChatClient()` uses the same two-step pattern as LM Studio and OpenAI. The deployment name (e.g. `"o4-mini"`) must match exactly what you named the deployment in Azure AI Foundry — not the model family name.
+
+That is the pattern you will see in every chapter from here on. Provider at the top. `IChatClient` everywhere else.
 
 ---
 
@@ -467,7 +481,7 @@ Three failures happen consistently, each with a clear cause:
 
 **"Connection refused" (LM Studio / Option A)**
 
-The server isn't responding. Check both of these:
+The server is not responding. Honestly, this is almost always one of two things:
 1. Is LM Studio's local server running? (green status indicator)
 2. Is a model loaded in the server panel? (the model name appears)
 
@@ -541,7 +555,9 @@ A delegate in C# is like a variable that stores a method reference rather than a
 
 ## Up Next:
 
-Chapter 3 is where the model stops being a black box. You'll learn how LLMs actually process text (tokens, not characters), why the context window is a hard ceiling not a soft guideline, and what temperature and Top-P do to your outputs. That knowledge turns prompt engineering from guesswork into something closer to a discipline.
+Chapter 3 is where the model stops being a black box. You will learn how LLMs actually process text (tokens, not characters), why the context window is a hard ceiling and not a soft guideline, and what temperature and Top-P actually do.
+
+Honestly, that chapter changed how I write prompts. It is worth the read even if you want to skip to the patterns. 🙂
 
 ---
 

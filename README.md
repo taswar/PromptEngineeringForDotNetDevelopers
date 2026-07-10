@@ -75,7 +75,7 @@ cd PromptEngineeringForDotNetDevelopers
 | 4 | Anatomy of a Great Prompt | ✅ Complete | 5-part prompt anatomy, two key principles, `PromptBuilder` fluent class |
 | 5 | Core Prompting Techniques | ✅ Complete | Zero-shot, few-shot, CoT, self-consistency, sycophancy, rubric-based prompting |
 | 6 | Structured Outputs and Advanced Patterns | ✅ Complete | JSON structured output, defensive parsing, streaming, resilience, model-as-validator |
-| 7 | Prompt Patterns for Real Developer Workflows | 🚧 Up next | Code review, test generation, summarisation |
+| 7 | Prompt Patterns for Real Developer Workflows | ✅ Complete | Code review, test generation, commit messages, documentation, DevToolkit app |
 
 ## Quick Start: Run Chapter 4
 
@@ -106,9 +106,12 @@ dotnet test chapter-04/tests/PromptBuilder.Tests
 
 ## License
 
-This book is free. Share it, use it, build with it.  
-MIT License — see [LICENSE](LICENSE).
+Prompt Engineering for .NET Developers
+Copyright © 2026 Taswar Bhatti
 
----
+This work is licensed under the Creative Commons
+Attribution-NonCommercial 4.0 International License.
 
-*Built with the vault: [[2026-prompt-engineering-csharp-vol1]]*
+To view a copy of this license, visit:
+https://creativecommons.org/licenses/by-nc/4.0/
+

@@ -453,7 +453,7 @@ This is not precise token counting, but it catches the obviously-too-large case 
 
 ## 6.6 The Model-as-Validator Pattern — Generate, Validate, Correct
 
-Standard retry sends the same prompt and hopes. The model-as-validator gives the model the actual error message and asks for a correction — the same way you run a linter before committing instead of hoping the build passes.
+Standard retry pattern just sends the same prompt and hopes/prays👏. The model-as-validator gives the model the actual error message and asks for a correction — the same way you run a linter before committing instead of hoping the build passes.
 
 The loop:
 

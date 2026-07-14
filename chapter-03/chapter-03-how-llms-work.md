@@ -49,9 +49,11 @@ Let's start with the one concept that underpins everything else.
 
 Before you write a single prompt, you need to understand what an LLM actually reads. Not words. Not characters. **Tokens.**
 
-### What a token is
+### What a token is 🪙
 
-A token is the basic unit of text that an LLM processes. Roughly speaking, a token is a word fragment — typically around 4 characters in common English text. The tokenizer (the component that converts raw text into tokens) splits text using a vocabulary of tens of thousands of sub-word fragments, chosen to balance coverage and efficiency.
+A token is the basic unit of text that an LLM processes. Not a word. Not a character. A sub-word fragment.
+
+Roughly 4 characters of common English becomes one token. The tokenizer — the component that converts your text before the model ever sees it — has a vocabulary of tens of thousands of these fragments. Common words are usually one token. Rare ones get split into pieces.
 
 Tokens are not:
 - Characters (too granular — a 10-character word might be 2–3 tokens)
@@ -109,12 +111,13 @@ We'll explore context windows properly in Section 3.3.
 
 ### Counting tokens in C#
 
-If you need exact token counts in C#, the `TiktokenSharp` NuGet package implements OpenAI's tokenisation algorithm. It's useful for building systems that need to stay within budgets, but it's a tangent for now. The `word × 1.33` estimate is good enough for everything in this book. *You can also try out [https://platform.openai.com/tokenizer](https://platform.openai.com/tokenizer) by OpenAI where it shows the amount of tokens just by typing in the text*.
+If you need exact token counts in C#, the `TiktokenSharp` NuGet package implements OpenAI's tokenisation algorithm. It's useful for building systems that need to stay within budgets, but it's a tangent for now. The `word × 1.33` estimate is good enough for everything in this book. *(Tip: OpenAI's tokenizer playground at [platform.openai.com/tokenizer](https://platform.openai.com/tokenizer) lets you paste any text and see the exact token breakdown. Worth five minutes.)*
 
 ```csharp
 // TiktokenSharp — for when you need exact counts, not estimates
-// var encoding = TiktokenSharp.TikToken.EncodingForModel("gpt-4o");
-// var tokenCount = encoding.Encode(myText).Count;
+// dotnet add package TiktokenSharp
+var encoding = TiktokenSharp.TikToken.EncodingForModel("gpt-4o");
+var tokenCount = encoding.Encode(myText).Count;
 ```
 
 ---
@@ -163,9 +166,9 @@ In a real chat application, you'd append each new user message and each new assi
 
 ### The "lost in the middle" problem
 
-There's a nuance worth knowing before you build anything with large contexts: models are better at attending to content near the **beginning** and **end** of the context window. Content buried deep in the middle — say, message 15 of 40 — is statistically less likely to influence the response, even if it's technically within the window.
+Models attend to content near the **beginning** and **end** of the context window most reliably. Content buried in the middle — say, message 15 of 40 — is less likely to influence the response, even if it's technically within the window.
 
-This is known as the "lost in the middle" problem, documented in several published papers. It's relevant when you start feeding large retrieved documents into the context — if you fetched ten documents and concatenated them, the model may effectively ignore the ones in the middle.
+Researchers call this "lost in the middle." It shows up when you start feeding large retrieved documents into the context. Fetch ten documents, concatenate them, and the model may effectively ignore the ones sandwiched in the middle.
 
 The practical upshot for now: **important instructions belong at the beginning (system prompt) or at the very end (just before the current user message).** Don't bury critical context in the middle of a long conversation history and wonder why the model isn't following it.
 
@@ -175,7 +178,7 @@ The practical upshot for now: **important instructions belong at the beginning (
 
 This is the context window limit in action. Some APIs silently drop the oldest messages when the limit is approached. No exception. No warning. The model starts responding as if the earlier conversation never happened — because from its perspective, it didn't.
 
-The defensive approach is to track your token budget explicitly and summarise or truncate conversation history before sending it. We'll revisit this in later chapters. For now, just know it can happen.
+The defensive approach is to track your token budget explicitly and summarise or truncate conversation history before sending it. We'll revisit this in later chapters. Know that it can happen — and that when it does, the model won't tell you.
 
 ---
 
@@ -187,9 +190,9 @@ This is the parameter every developer touches first, often without understanding
 
 ### What temperature is 🔥❄️🌨️
 
-When the model generates a response, it doesn't just deterministically output the single most likely next word. Internally, it computes a probability distribution over its entire vocabulary — every token it could possibly produce next, each with an associated probability score. Then it *samples* from that distribution.
+The model is not picking words from a lookup table. At every step, it produces a ranked list of every token it could generate next, each with a probability score. Then it draws from that list.
 
-**Temperature is a multiplier on that distribution.**
+**Temperature is the dial that controls how that draw works.**
 
 - **Low temperature** (approaching 0) sharpens the distribution — the highest-probability tokens get even higher relative probability, the rest get squashed. The model becomes more likely to pick the "obvious" next token.
 - **High temperature** (approaching 2.0) flattens the distribution — probabilities spread out, and lower-probability tokens get a real chance of being selected. The model becomes more likely to pick something surprising.
@@ -255,7 +258,7 @@ Instead of scaling the entire distribution, top-P says: "only sample from the sm
 
 ## 3.5 The Chat Message Structure
 
-The role you assign to each message shapes how the model weights it. Getting this right — especially the distinction between System and User — is one of the highest-leverage things you'll do in prompt engineering, because a single well-written system prompt replaces boilerplate instructions in every subsequent user message.
+The role you assign to each message shapes how the model reads it. Getting System and User right is one of the most impactful habits you'll build. A single well-written system prompt replaces the same boilerplate instruction in every user message that follows.
 
 Every call to `GetResponseAsync` takes a list of `ChatMessage` objects. Each message has a role. There are three roles, and they're not interchangeable.
 
@@ -345,7 +348,7 @@ The second approach means you can send dozens of code snippets with a single-lin
 
 ## 3.6 Other Parameters Worth Knowing
 
-`ChatOptions` in MEAI has several other properties. Most of the time you'll ignore them. Here's when you won't:
+`ChatOptions` in Microsoft.Extensions.AI (MEAI) has several other properties. Most of the time you'll ignore them. Here's when you won't:
 
 | Parameter | What it does | When to touch it |
 |---|---|---|
@@ -395,7 +398,7 @@ A prompt that works perfectly on GPT-4o may need adjustment for Phi-4 Mini, and 
 - Parameter count and architecture
 - Fine-tuning for specific tasks (coding, reasoning, safety)
 
-Prompts are not portable across models without testing. This is not a complaint — it's just how the technology works. No different that the fact that not all SQL is portable to every single database.
+Prompts are not portable across models without testing. That is not a complaint — it is how the technology works. Not all SQL runs on every database either.
 
 Here's a rough character sketch of the model families you're likely to use:
 
@@ -407,7 +410,7 @@ Here's a rough character sketch of the model families you're likely to use:
 | Mistral 7B (Mistral AI) | Fast and lean; good for local deployment | Needs more explicit formatting instructions than commercial models; smaller world knowledge |
 | Llama 3.1 / 3.2 (Meta) | Strong open-source baseline, good coding ability, runs well locally | Requires more explicit prompting structure than commercial models |
 
-> 📝 **Jagged intelligence:** Andrew Ng coined this phrase to describe an important property of AI models — they exceed human capability on some tasks (parsing thousands of documents in seconds, solving tricky maths problems, finding obscure API patterns) while falling short on others (fine-grained visual detail, spatial reasoning, tasks requiring physical-world common sense). Critically, different models are jagged in *different ways* — GPT-4o might outperform Claude on a coding task while Claude outperforms it on a legal analysis. This is why the advice "just use the best model" oversimplifies: test your specific task against your candidate models.
+> 📝 **Jagged intelligence:** Andrew Ng coined this phrase to describe an important property of AI models — they exceed human capability on some tasks (parsing thousands of documents in seconds, solving tricky maths problems, finding obscure API patterns) while falling short on others (fine-grained visual detail, spatial reasoning, tasks requiring physical-world common sense). Critically, different models are jagged in *different ways* — GPT-4o might outperform Claude on a coding task while Claude outperforms it on a legal analysis. This is why the advice "pick the best model and move on" oversimplifies: test your specific task against your candidate models.
 
 > 📝 **Reliability correlates with internet coverage:** AI reliability on a topic scales roughly with how much text about that topic exists on the internet. Common frameworks, popular algorithms, well-documented APIs → the model has seen millions of examples and is likely reliable. Niche libraries, internal domain knowledge, proprietary protocols → the model has seen few or zero examples and may confabulate confidently. When reliability matters, supply the facts yourself via context rather than relying on pretrained knowledge.
 
@@ -418,6 +421,8 @@ Here's a rough character sketch of the model families you're likely to use:
 This one catches people off guard: major cloud providers A/B test model variants silently. The model serving your requests today might be a slightly different checkpoint than last week's, with no announcement and no version number change from your perspective.
 
 This is why teams building on top of LLMs should pin model versions where possible (Azure OpenAI lets you pin deployments to a specific model version) and run evaluation pipelines rather than eyeballing outputs manually. More on this in later chapters.
+
+Honestly, if your production target is GPT-4o or Claude and you've been testing locally against Phi-4 Mini, do one run against the real model before you ship. You will find at least one difference.
 
 ---
 
@@ -603,7 +608,7 @@ var options = new ChatOptions
 };
 ```
 
-Watch the response get cut off mid-sentence. This demonstrates `MaxOutputTokens` — it's a hard stop at the token count, not a soft "try to be short." The model doesn't know the cut is coming; it's just interrupted. Useful for enforcing short labels in classification tasks.
+Watch the response get cut off mid-sentence. This demonstrates `MaxOutputTokens` — it's a hard stop at the token count, not a soft "try to be short." The model doesn't know the cut is coming; it is cut off mid-token. Useful for enforcing short labels in classification tasks.
 
 **3. Try a stop sequence:**
 

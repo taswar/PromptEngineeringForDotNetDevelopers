@@ -71,7 +71,7 @@ public ReviewService(ICodeReviewer reviewer) // — you control the dependency
 
 **What makes a role bad:**
 
-No role at all is the most common mistake. The model will still respond — but it'll respond like a general assistant, not a specialist. The output will be less focused, more hedged, and more verbose than it needs to be.
+No role at all is the most common mistake. Honestly, the model still responds — but it responds like a support bot, not a senior reviewer. You get output that is hedged, verbose, and useful to approximately nobody.
 
 ---
 
@@ -174,7 +174,7 @@ var systemPrompt = """
 
 The before/after is measurable: without the example, the model might write "The field name could potentially be null in some circumstances, which might cause a NullReferenceException." With it, it tends to write "Null reference risk: 'name' field may be null — return type should be string? or add a null check." One is precise. One is a politely-worded concern.
 
-> 💡 **A note on `Input:` and `Output:` inside the prompt:** These are just text labels — they tell the model what the example input looks like and what format you want the response in. The model has no special awareness of the words "Input" and "Output"; it reads them as part of the prompt text, the same way it reads everything else. The `PromptBuilder` API you'll see shortly makes this cleaner with named parameters — `.WithExample(input: "...", output: "...")` — which signals intent in your C# code and produces the same labelled structure in the assembled prompt.
+> 💡 **A note on `Input:` and `Output:` inside the prompt:** These are plain text labels — they tell the model what the example input looks like and what format you want the response in. The model has no special awareness of the words "Input" and "Output"; it reads them as part of the prompt text, the same way it reads everything else. The `PromptBuilder` API you'll see shortly makes this cleaner with named parameters — `.WithExample(input: "...", output: "...")` — which signals intent in your C# code and produces the same labelled structure in the assembled prompt.
 
 > 📝 **A sixth advanced element — Success Criteria:** Once you have all five parts, you can optionally add explicit success criteria (a rubric) that tells the model *how to judge its own output*. For a code review, that might be: "Score each finding — 1 point if the issue is a correctness bug, 0 if it is a style concern. Only include findings that score 1." Rubric-based evaluation forces objectivity and combats the sycophancy bias introduced above. It gets a full treatment in Chapter 5.
 
@@ -248,7 +248,7 @@ var userPrompt = $"""
     """;
 ```
 
-There are two reasons to do this deliberately, not just stylistically:
+There are two reasons to do this deliberately, not only for style:
 
 **Clarity:** The model can tell where the instruction ends and the input begins. Without delimiters, long prompts with embedded content blur together.
 
@@ -270,7 +270,7 @@ The model is more reliable when it knows what shape the output should take. Comp
 
 With the first, the model invents a format. With the second, the format is a contract. When you're writing C# code that will parse the response, the difference between `response.Text` that's a JSON array and `response.Text` that's three paragraphs of prose is the difference between `JsonSerializer.Deserialize<T>()` succeeding or throwing a `JsonException` at 3 AM.
 
-You don't always need JSON. When you want structure without deserialization overhead, **labeled output** works just as well — you specify named fields and the model fills them in:
+You don't always need JSON. When you want structure without deserialization overhead, **labeled output** works equally well — you specify named fields and the model fills them in:
 
 ```text
 "Analyse the following code change. Use this exact format:
@@ -311,9 +311,9 @@ Provide one or two examples of what good input/output pairs look like. This is c
 
 ### Principle 2 — Give the Model Time to Think
 
-LLMs generate text left-to-right, one token at a time. They don't pause, think, and then output. They output as they think. If you ask for a conclusion immediately, you get a conclusion that the model has to make up before it's had a chance to reason toward it.
+LLMs generate text left-to-right, one token at a time. They do not pause, think, and then output. They output while thinking. Ask for a conclusion immediately and you get a guess dressed up as an answer.
 
-The fix is to instruct the model to reason *before* it concludes — and to lay out the steps you want it to work through.
+The fix is to give the model room to reason first.
 
 ---
 
@@ -361,15 +361,15 @@ This is the foundation of chain-of-thought prompting, which gets a full section 
 
 > 📝 **Note:** This isn't the model having a eureka moment. It's a structural property of left-to-right token generation — the tokens the model generates in the "reasoning" part of the response inform the probability distribution over the tokens in the "conclusion" part. More context → better output. It's still tokens all the way down.
 
-> 📝 **"Think step-by-step" is 2022–2023 advice.** Andrew Ng, who popularised chain-of-thought prompting, now says explicitly: *"I no longer tell my AI model to think step-by-step. Instead, I'm more likely to just tell it to think hard."* Modern reasoning models (like `phi-4-mini-reasoning`) engage their internal reasoning loop automatically when given `"think hard"` or `"think really hard"` — no explicit step enumeration required. Some interfaces also recognise the keyword **`ultrathink`** as a signal for maximum reasoning effort. The underlying principle — give the model room to reason before concluding — is still correct. Only the phrasing has evolved.
+> 📝 **"Think step-by-step" is 2022–2023 advice.** Andrew Ng, who popularised chain-of-thought prompting, has moved on from it: *"I no longer tell my AI model to think step-by-step. Instead, I'm more likely to just tell it to think hard."* Modern reasoning models (like `phi-4-mini-reasoning`) engage their internal reasoning loop automatically when given `"think hard"` or `"think really hard"` — no explicit step enumeration required. Some interfaces also recognise the keyword **`ultrathink`** as a signal for maximum reasoning effort. The underlying principle — give the model room to reason before concluding — is still correct. Only the phrasing has evolved.
 
 ---
 
 > ⚠️ **The silent failure mode: Sycophancy**
 >
-> There's a structural property of instruction-tuned models that undermines careful prompt engineering: **sycophancy**. Because these models are trained via human feedback (RLHF), where human raters tend to give thumbs-up to agreeable responses and thumbs-down to pushback, the models learn to tell you what you want to hear. A Washington Post analysis of ChatGPT responses found it used agreeable phrases roughly **10× more** than disagreeing ones — "that's correct," "good point," "you're on the right track" vs "not quite right" or "actually."
+> Instruction-tuned models are trained on human feedback. Human raters tend to prefer agreeable responses. So the model learned to be agreeable. A Washington Post analysis found ChatGPT used phrases like "that's correct" and "good point" roughly **10× more** than "not quite right" or "actually."
 >
-> This matters in practice: a biased question produces a biased answer.
+> The model will validate your bad idea if you phrase the question like you've already made up your mind. That is sycophancy. And it is a structural property — not a bug you can patch out.
 >
 > | Sycophantic prompt | Neutral rewrite |
 > |---|---|
@@ -389,9 +389,9 @@ String interpolation is fine for one-off prompts:
 var prompt = $"Review this method: {codeToReview}";
 ```
 
-It's when prompts get longer, start getting reused across the codebase, and need to be constructed differently per context that the cracks appear. You end up with string concatenation that spans 40 lines, or variables named `systemPromptV2Final` that nobody can decipher, or subtle bugs where a forgotten `\n` means a constraint never gets its own line.
+Then the prompts get longer. They get reused across the codebase. They need different shapes per context. That is where string concatenation starts to collapse — 40-line prompt builds, variables named `systemPromptV2Final` that nobody can explain, a missing `\n` that breaks a constraint silently.
 
-What you need is a structured builder — one that maps to the 5-part anatomy and makes the prompt's intent readable at the call site.
+What you need is a structured builder that maps directly to the 5-part anatomy.
 
 ### The PromptBuilder
 
@@ -506,11 +506,11 @@ public sealed class PromptBuilder
 
 A few notes on the implementation:
 
-- `WithConstraints` takes a string (not individual bullet points) so the caller controls the format — you can call it multiple times for separate constraint groups; `Build()` adds a blank line between groups so the model parses them as distinct concerns
-- `Build()` guards on `_task` being set — everything else is optional, but a prompt without a task has nothing to instruct the model
-- Examples are wrapped in `---` delimiters in the assembled output — this prevents example content from leaking into the model's instruction context (a basic defence against accidental prompt injection via example data)
-- The output order is fixed: role → context → task → constraints → examples. This maps to "most stable first, most specific last" — which aligns with the "lost in the middle" finding from Chapter 3
-- `ArgumentException.ThrowIfNullOrWhiteSpace` gives you a clear `ArgumentException` at the call site rather than a confusing model response caused by an empty string you didn't notice
+- `WithConstraints` takes a full string — call it multiple times for separate constraint groups. `Build()` adds a blank line between groups so the model reads them as distinct concerns.
+- `Build()` throws if `_task` is null. A prompt with no task has nothing to tell the model.
+- Examples are wrapped in `---` delimiters. This prevents example content from bleeding into the instruction context — basic but effective injection defence.
+- Output order is fixed: role → context → task → constraints → examples. Most stable first, most specific last. That matches the "lost in the middle" pattern from Chapter 3.
+- `ArgumentException.ThrowIfNullOrWhiteSpace` gives you a clear `ArgumentException` at the call site rather than a confusing model response caused by an empty string you didn't notice.
 
 > 📝 **This is a teaching implementation.** For production prompt management you'd look at the richer prompt templating in Microsoft Agent Framework or Azure AI Foundry's prompt management features — but they're all more complex than you need right now, and understanding the structure first makes evaluating them much easier.
 
@@ -520,16 +520,16 @@ A few notes on the implementation:
 
 There is no perfect prompt. Not for your use case, not for any use case. The prompt that works reliably in production is the one that went through five iterations, not the one that "should work." This is not a failure mode — it's the process. Andrew Ng (who co-created the DeepLearning.AI prompt engineering course with OpenAI) puts it directly: *"There probably isn't a perfect prompt for everything under the sun. It's more important that you have a process for developing a good prompt for your specific application."*
 
-Prompts are software. You write them, run them, measure the output, and refine them. The one thing that makes prompt iteration different from normal debugging is that **you must change one thing at a time**.Change the role and the constraints simultaneously and you can't know which change improved the output. Treat it like a controlled experiment.
+Prompts are software. You write them, run them, measure the output, and refine them. The one rule that separates prompt debugging from guesswork: **change one thing at a time**. Change the role and the constraints at once and you will never know which one fixed it. Treat it like a controlled experiment.
 
 The four-step loop:
 
 1. **Write** the prompt using the 5-part anatomy
-2. **Run** it against 3–5 representative inputs (not just the happy path)
+2. **Run** it against 3–5 representative inputs (not only the happy path)
 3. **Identify** where it fails — wrong format, wrong focus, hallucinated issues, missing issues
 4. **Fix** exactly one thing, re-run, repeat
 
-Here's the failure taxonomy you'll encounter most often, and what to do about it:
+Here is the failure taxonomy you will hit most often. Honestly, most bad prompt outputs fall into one of these seven buckets:
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
@@ -702,7 +702,7 @@ Chapter 4 gave you the structure. Chapter 5 gives you the techniques that go *in
 
 Zero-shot prompting (which you've already been using, whether you called it that or not), few-shot prompting (those examples in `WithExample` get a full chapter), chain-of-thought (that "step by step" hint expands into a genuinely powerful pattern), and self-consistency (running the same prompt multiple times and voting on the result — surprisingly effective for reasoning tasks).
 
-By the end of Chapter 5, your prompts won't just be structured — they'll be using the right technique for the right task. The `PromptBuilder` you built here is the vehicle. Chapter 5 is learning to drive it.
+By the end of Chapter 5, your prompts won't only be structured — they'll be using the right technique for the right task. The `PromptBuilder` you built here is the vehicle. Chapter 5 is learning to drive it.
 
 ---
 

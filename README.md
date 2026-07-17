@@ -2,11 +2,6 @@
 ## From Zero to Production Prompts — C#
 
 > A free ebook for .NET developers who want to build real AI-powered applications — without the hype, without the Python tax, and without spending a fortune on API credits.
-
-<p align="left">
-  <a href="https://www.buymeacoffee.com/taswar" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" style="height: 60px !important;width: 217px !important;" ></a>
-</p>
-
 ---
 
 ## Repository Structure

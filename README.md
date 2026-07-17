@@ -4,45 +4,6 @@
 > A free ebook for .NET developers who want to build real AI-powered applications — without the hype, without the Python tax, and without spending a fortune on API credits.
 ---
 
-## Repository Structure
-
-```
-PromptEngineeringForDotNetDevelopers/
-├── README.md                               ← You are here
-├── chapter-01/
-│   ├── chapter-01-the-dotnet-developers-ai-landscape.md   ✅
-│   ├── images/
-│   │   └── cost-spectrum-light.png
-│   └── src/
-│       └── HelloAI/                        ← Sneak peek: your first IChatClient call
-├── chapter-02/
-│   ├── chapter-02-setting-up-your-environment.md          ✅
-│   ├── images/
-│   │   ├── provider-switching.png
-│   │   └── configuration-hierarchy.png
-│   ├── src/
-│   │   └── HelloAI/                        ← LM Studio + OpenAI + Azure in one project
-│   └── tests/
-│       └── HelloAI.Tests/                  ← 11 unit tests + 1 integration test
-├── chapter-03/
-│   ├── chapter-03-how-llms-work.md                        ✅
-│   ├── images/
-│   │   ├── temperature-distribution-light.png
-│   │   └── context-window-light.png
-│   ├── src/
-│   │   └── ParameterPlayground/            ← Temperature / context window explorer
-│   └── tests/
-│       └── ParameterPlayground.Tests/      ← 11 unit tests
-├── chapter-04/
-│   ├── chapter-04-anatomy-of-a-great-prompt.md            ✅
-│   ├── src/
-│   │   └── PromptBuilder/                  ← Fluent 5-part prompt builder + code review demo
-│   └── tests/
-│       └── PromptBuilder.Tests/            ← 31 unit tests
-├── chapter-05/  (coming soon)
-└── ...
-```
-
 ## Prerequisites
 
 - .NET 10 or later

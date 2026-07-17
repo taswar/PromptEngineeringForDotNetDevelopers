@@ -60,7 +60,7 @@ Three tools will help you close the gap:
 2. **JSON Schema mode** — some providers accept a schema alongside the request and enforce it at the output level
 3. **Defensive parsing + retry** — clean whatever comes back before deserializing, retry on failure
 
-In practice you use all three of these tools, layered somewhat like a cake :). The next four sections cover each in depth.
+In practice you use all three of these tools, layered somewhat like a cake 🎂. The next four sections cover each in depth.
 
 ---
 

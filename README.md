@@ -2,6 +2,8 @@
 ## From Zero to Production Prompts — C#
 
 > A free ebook for .NET developers who want to build real AI-powered applications — without the hype, without the Python tax, and without spending a fortune on API credits.
+
+You can also download this ebook from leanpub (<a href="https://leanpub.com/promptengineeringfornetdevelopers">https://leanpub.com/promptengineeringfornetdevelopers</a>)
 ---
 
 ## Prerequisites

@@ -3,6 +3,10 @@
 
 > A free ebook for .NET developers who want to build real AI-powered applications — without the hype, without the Python tax, and without spending a fortune on API credits.
 
+<p align="left">
+  <a href="https://www.buymeacoffee.com/taswar" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+</p>
+
 ---
 
 ## Repository Structure
@@ -103,6 +107,18 @@ dotnet test chapter-03/tests/ParameterPlayground.Tests
 # Chapter 4 — unit tests (31 tests, no LM Studio required)
 dotnet test chapter-04/tests/PromptBuilder.Tests
 ```
+
+## Support This Work
+
+This book is free and will stay free. It is written outside my day job — evenings, weekends, and the occasional early morning with too much coffee.
+
+If it has helped you land a job, ship a feature, or save a debug session at 2 AM — a coffee is a genuinely kind way to say thanks. It keeps me caffeinated and writing.
+
+<p align="left">
+  <a href="https://www.buymeacoffee.com/taswar" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+</p>
+
+Not in a position to buy a coffee? No problem. **Star the repo, share it with a colleague, or [open an issue](https://github.com/your-username/PromptEngineeringForDotNetDevelopers/issues) with a typo you spotted.** Any of those helps. 🙂
 
 ## License
 

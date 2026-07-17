@@ -15,7 +15,7 @@
 
 If Chapter 4 was about *structure*, this chapter is about *strategy*. You have a `PromptBuilder` that produces well-formed prompts. Now you need to know which technique to reach for when you want reliable, accurate, objective results — and which to avoid when the stakes are higher than "it looks about right."
 
-The techniques here aren't academic. They emerged from trial and error by researchers and practitioners, survived contact with real workloads, and each solves a specific class of problem. Some fit in two lines. One — sycophancy mitigation — requires rethinking how you ask questions entirely.
+The techniques here aren't academic. Researchers tried them. Practitioners ran them on real workloads. Each one solves a specific class of problem. Some fit in two lines. One — sycophancy mitigation — requires rethinking how you ask questions entirely.
 
 ---
 
@@ -108,17 +108,17 @@ The model now knows: three output fields, exact labels `Bug:`, `Null Risk:`, `Pe
 
 ### Investing in Your Examples
 
-If you're building a pipeline that processes many items — say, a tool that reviews every method in a codebase — treat your few-shot examples with the same care you give to a good test fixture. Write them deliberately, cover the edge cases, and test them before scaling up. Garbage examples produce consistent garbage at scale. As one of my professor used to tell us in our Logic Computing Science course back in the day, *"Garbage in == Garbage out !"*
+If you're building a pipeline that processes many items — say, a tool that reviews every method in a codebase — treat your few-shot examples with the same care you give to a good test fixture. Write them deliberately, cover the edge cases, and test them before scaling up. Garbage examples produce consistent garbage at scale. As one of my professors used to tell us in my Logic Computing Science Course: *"Garbage in == Garbage out!"*
 
 ---
 
 ## 5.3 Role Prompting — Persona Engineering for Specialist Output
 
-You built `WithRole()` in Chapter 4. The mechanism is worth revisiting briefly, because the nuance matters.
+You built `WithRole()` in Chapter 4. Here is what it actually does under the hood — and why it matters more than it looks.
 
 Role prompting isn't politeness — it activates different regions of the model's training distribution. When you tell the model it's a "senior C# developer," it weights responses toward developer communication styles, vocabulary, and priorities. When you tell it it's a "security auditor," it weights toward threat modeling and vulnerability identification. Same base model, meaningfully different output.
 
-**The nuance Chapter 4 didn't cover:** specify what the role *optimizes for*, not just what it is.
+**The nuance Chapter 4 didn't cover:** specify what the role *optimizes for*, not only what it is.
 
 Compare:
 
@@ -131,7 +131,7 @@ Compare:
  correctness and exception safety matter more than brevity."
 ```
 
-The second version tells the model not just who it is, but what it prioritizes. The model won't spontaneously trade off correctness for conciseness when the role makes the trade-off explicit.
+The second version tells the model not only who it is, but what it prioritizes. The model won't spontaneously trade off correctness for conciseness when the role makes the trade-off explicit.
 
 One caution: if your role prompt conflicts with the task, the model will pick one and ignore the other. A role that says "be concise" paired with a task that says "explain every issue in full detail" will produce an incoherent result. Role and task should reinforce each other.
 
@@ -145,7 +145,7 @@ In 2022–2023, "Let's think step by step" was a genuine empirical finding. Addi
 
 Andrew Ng — whose *Prompt Engineering for Developers* course popularized much of the early prompting curriculum — has since noted that modern models have absorbed this kind of instruction so thoroughly during training that the phrase no longer has the same effect. The model learned to *format* its response as numbered steps without necessarily reasoning more carefully. You get the aesthetic of reasoning without the substance.
 
-"Think step by step" was calibrated for models like GPT-3. For GPT-4, Claude 3+, Phi-4, and their contemporaries, the phrase is mostly cargo cult — following a practice because it once worked, without understanding why it worked. If you're still putting it in every prompt, you're not wrong, exactly, but you're probably not getting what you think you're getting.
+"Think step by step" was calibrated for models like GPT-3. For GPT-4, Claude 3+, Phi-4, and their contemporaries, the phrase is mostly cargo cult — following a practice because it once worked, without understanding why it worked. Honestly, if you're still putting it in every prompt, you're not getting what you think you're getting.
 
 ### The Modern Form
 
@@ -228,7 +228,7 @@ For consistency on complex tasks, combine few-shot examples *with* worked reason
     """)
 ```
 
-This tells the model what good reasoning looks like before it processes your real input, not just what the output shape should be.
+This tells the model what good reasoning looks like before it processes your real input — not only the output shape.
 
 ---
 
@@ -296,7 +296,7 @@ One constraint: self-consistency works best on tasks with a bounded answer space
 
 ## 5.6 Sycophancy — The Problem You Didn't Know You Had
 
-This section gets dedicated depth because sycophancy is the most common source of subtly wrong AI output that developers don't catch — and it's the hardest to detect precisely because the output *sounds* correct.
+Sycophancy is the most common source of subtly wrong AI output that developers miss. It is also the hardest to catch — precisely because the output *sounds* correct.
 
 ### What It Is and Why It Happens
 
@@ -338,7 +338,7 @@ The neutral rewrites don't ask the model to agree or disagree. They ask for anal
 
 ### Why This Is Harder Than It Looks
 
-Sycophancy is hard to catch because the model doesn't announce it. It produces a calm, articulate, well-organized explanation of why your approach is sound. The confidence level looks identical to the confidence level on a correct response. You have no signal that the model is agreeing because you seemed to want it to agree.
+Sycophancy is hard to catch because the model doesn't announce it. It produces a calm, well-organized explanation of why your approach is sound. The confidence on a wrong answer looks identical to the confidence on a correct one. That is the whole problem.
 
 Your only defense is in the question itself — not in how you interpret the answer.
 
@@ -346,7 +346,7 @@ Your only defense is in the question itself — not in how you interpret the ans
 
 One practical mitigation: ask a second model to critique the first model's output without showing it your original assumptions.
 
-If you asked Model A "is my Repository pattern implementation good?" and it said yes, paste just the code and Model A's response into Model B (without showing B your original question) and ask: "What does this review miss, and what problems does the code have that aren't mentioned?"
+If you asked Model A "is my Repository pattern implementation good?" and it said yes, paste only the code and Model A's response into Model B (without showing B your original question) and ask: "What does this review miss, and what problems does the code have that aren't mentioned?"
 
 The second model, given no position to validate, will often find the gaps. This is especially useful for architecture and design reviews where the stakes justify the extra call.
 
@@ -459,9 +459,7 @@ Compare that to what "Is this method good?" produces. The rubric version is acti
 
 ## 5.8 Constraint Prompting — Setting Limits
 
-We introduced in Chapter 4 `WithConstraints()`. One important detail to keep in mind is that:
-
-Constraints serve two distinct purposes worth keeping separate:
+You added `WithConstraints()` in Chapter 4. Constraints serve two distinct purposes. Keep them separate:
 
 1. **Format constraints** — what shape the output should take (`"respond in JSON"`, `"one finding per line"`, `"use markdown headers H2 and H3 only"`)
 2. **Scope constraints** — what to focus on and what to explicitly ignore (`"focus only on null safety"`, `"do not suggest refactors unrelated to the reported bug"`)
@@ -539,6 +537,8 @@ Console.WriteLine(response2.Text);
 
 Each turn builds on the previous context. The model isn't starting fresh — it knows which option you chose and can reason about it specifically. This is the multi-turn conversation pattern you'll use extensively in Chapter 7 when we cover agentic workflows.
 
+If your team already talks through design choices before committing to one, this pattern maps naturally to how you already work. Worth adding to your prompting toolkit.
+
 ---
 
 ## 5.10 Practical: TechniqueBenchmark
@@ -585,9 +585,9 @@ dotnet user-secrets set "AzureAI:Key"      "your-key-here"
 
 ### What to Look For
 
-- Does zero-shot catch both problems, or just the more obvious one?
-- Does the few-shot example constrain the output format in a useful way? Does the format help or just add structure for its own sake?
-- Does the CoT version produce more thorough reasoning? Does that translate to more accurate findings, or just more words?
+- Does zero-shot catch both problems, or only the more obvious one?
+- Does the few-shot example constrain the output format in a useful way? Does the format help, or does it only add structure for its own sake?
+- Does the CoT version produce more thorough reasoning? Does that translate to more accurate findings, or only more words?
 - Does the rubric version surface something the others missed? Does the structured scoring change the tone of the findings?
 
 The answer will depend on the model. Smaller local models (Phi-4 Mini, Mistral) tend to do better with few-shot and rubric guidance than with zero-shot. Frontier models (GPT-4o, Claude Sonnet) often perform comparably across techniques for well-understood tasks like code review — which is itself a useful data point.
@@ -608,7 +608,7 @@ The answer will depend on the model. Smaller local models (Phi-4 Mini, Mistral) 
 |---|---|
 | Zero-shot | Task only. Try this first. If output is inconsistent, add examples. |
 | Few-shot | 1–5 examples as golden fixtures. Calibrates format and behavior. 1 is usually enough for format; 2–3 for nuanced classification. |
-| Role prompting | Activates different training distributions. Specify what the role *optimizes for*, not just what it is. |
+| Role prompting | Activates different training distributions. Specify what the role *optimizes for*, not only what it is. |
 | Chain-of-thought | "Think hard" not "think step by step." Use for multi-step reasoning, verification, security review. Cargo cult on simple tasks. |
 | Self-consistency | N runs at T>0, take majority. Costs N× API calls. Worth it for high-stakes discrete decisions. |
 | Sycophancy | RLHF makes models agree with you. Leading questions get validating answers. Neutral framing gets honest analysis. |
@@ -634,44 +634,3 @@ The `PromptBuilder` carries forward. The `TechniqueBenchmark` patterns carry for
 *← [Chapter 4 — Anatomy of a Great Prompt](../chapter-04/chapter-04-anatomy-of-a-great-prompt.md) | [Chapter 6 — Structured Outputs and Advanced Patterns](../chapter-06/chapter-06-structured-outputs.md) →*
 
 ---
-
-## Appendix: MEMORY.md Updates
-
-### New Glossary Terms to Add
-
-| Term | Definition |
-|---|---|
-| **Zero-shot prompting** | Prompting with no worked examples. The baseline technique. Try first. |
-| **Few-shot prompting** | Providing 1–5 worked examples before the real task to calibrate format and behavior. |
-| **Chain-of-thought (CoT)** | Prompting technique that applies reasoning pressure ("think hard"). NOT "think step by step" for modern models. |
-| **Self-consistency** | Running a prompt N times at T>0 and taking the majority answer. Used for high-stakes discrete decisions. |
-| **Sycophancy** | Model tendency to agree with and validate the user's assumptions, caused by RLHF. Mitigated by neutral framing. |
-| **Rubric-based prompting** | Prompting with explicit binary (yes/no) criteria, scored before an overall verdict. Prevents sycophantic anchoring. |
-| **Scope constraint** | A constraint that limits *what* the model should address, not just how it should format the output. |
-
-### New Code Patterns to Add
-
-**Self-consistency helper (§5.5):**
-```csharp
-var options = new ChatOptions { Temperature = 0.7f, MaxOutputTokens = 512 };
-var response = await client.GetResponseAsync(prompt, options, CancellationToken.None);
-// Run N times, extract discrete answer, group by value, take majority
-```
-
-**Rubric prompt template (§5.7):**
-```csharp
-// WithTask: "Answer YES or NO for each criterion. Do NOT give overall judgment before scoring."
-// Binary criteria. Score-then-sum order. Prevents anchoring.
-```
-
-**Brainstorming (§5.9):**
-```csharp
-// Ask for "3–5 options" not one answer. Include trade-offs in required output fields.
-// Multi-turn: add previous response as ChatRole.Assistant message before next user turn.
-```
-
-### Updated Carry-Forward Items
-
-- `PromptBuilder` from Ch4: carries into Ch5 — used in rubric builder, few-shot examples, CoT prompts
-- `TechniqueBenchmark` pattern: benchmark structure (same task, N techniques, compare output) is reusable for model evaluation in later chapters
-- Sycophancy table: the before/after framing table is a reference artifact — link to it from later chapters when reviewing prompts

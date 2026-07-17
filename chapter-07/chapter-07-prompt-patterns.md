@@ -420,7 +420,7 @@ XML doc comments are one of those things everyone agrees are a good idea and alm
 
 XML doc comments take time. They require you to stop, think about what you are going to say, and then write it out in a specific format with opening and closing tags on every line. For a method with four parameters and two exceptions, that is 15+ lines before you start. Most teams skip them.
 
-The resulting gap is not just a documentation problem. It is a discoverability problem. IntelliSense shows nothing. New team members have no guidance. The comments that do exist are stale. As the joke goes *"Code without comments is like a joke that has to be explained"*
+The resulting gap is not just a documentation problem. It is a discoverability problem. IntelliSense shows nothing. New team members have no guidance. The comments that do exist are stale. As the joke goes *"Code without comments is like a joke that has to be explained"*.
 
 ### The Pattern
 

@@ -23,7 +23,7 @@ Clone the repo, open a chapter, follow along.
 No Jupyter notebooks. No Python. Just C#.
 
 ```bash
-git clone https://github.com/your-username/PromptEngineeringForDotNetDevelopers
+git clone https://github.com/taswar/PromptEngineeringForDotNetDevelopers
 cd PromptEngineeringForDotNetDevelopers
 ```
 

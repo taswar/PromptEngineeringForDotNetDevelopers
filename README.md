@@ -76,7 +76,7 @@ If it has helped you land a job, ship a feature, or save a debug session at 2 AM
   <a href="https://www.buymeacoffee.com/taswar" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 </p>
 
-Not in a position to buy a coffee? No problem. **Star the repo, share it with a colleague, or [open an issue](https://github.com/your-username/PromptEngineeringForDotNetDevelopers/issues) with a typo you spotted.** Any of those helps. 🙂
+Not in a position to buy a coffee? No problem. **Star the repo, share it with a colleague, or [open an issue](https://github.com/taswar/PromptEngineeringForDotNetDevelopers/issues) with a typo you spotted.** Any of those helps. 🙂
 
 ## License
 

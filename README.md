@@ -6,6 +6,30 @@
 You can also download this ebook from leanpub (<a href="https://leanpub.com/promptengineeringfornetdevelopers">https://leanpub.com/promptengineeringfornetdevelopers</a>)
 ---
 
+<p align="center">
+  <strong>Build real AI features into your .NET apps — in C#, no Python required.</strong>
+</p>
+
+<p align="center">
+  ⭐ <a href="https://github.com/taswar/PromptEngineeringForDotNetDevelopers">Star this repo</a> ·
+  📥 <a href="https://leanpub.com/promptengineeringfornetdevelopers">Download free on Leanpub</a> ·
+  🐛 <a href="https://github.com/taswar/PromptEngineeringForDotNetDevelopers/issues">Report an issue</a>
+</p>
+
+## 🚀 Start in 5 Minutes
+
+```bash
+git clone https://github.com/taswar/PromptEngineeringForDotNetDevelopers
+cd PromptEngineeringForDotNetDevelopers/chapter-04/src/PromptBuilder
+dotnet run
+```
+
+<p align="center">
+ <img src="./cover/chapter4-dotnet-run.png" alt="screen shot of chapter 4 running code"/>
+</p>
+
+---
+
 ## Prerequisites
 
 - .NET 10 or later

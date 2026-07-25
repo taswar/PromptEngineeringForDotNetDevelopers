@@ -24,7 +24,7 @@ var config = new ConfigurationBuilder()
 IChatClient client = new OpenAIClient(
         new ApiKeyCredential("lm-studio"),
         new OpenAIClientOptions { Endpoint = new Uri("http://localhost:1234/v1") })
-    .GetChatClient("microsoft/phi-4-mini-reasoning")
+    .GetChatClient("microsoft/phi-4-mini-instruct")
     .AsIChatClient();
 
 // ── Option B: OpenAI API ──────────────────────────────────────────────────────

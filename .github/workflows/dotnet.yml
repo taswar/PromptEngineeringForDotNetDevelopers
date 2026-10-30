@@ -1,0 +1,31 @@
+name: build
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Build every project
+      run: |
+        for p in $(git ls-files '*.csproj'); do
+          dotnet build "$p" --configuration Release
+        done
+
+    - name: Unit tests
+      run: |
+        for p in $(git ls-files '*Tests.csproj'); do
+          dotnet test "$p" --configuration Release --no-build --filter "Category!=Integration"
+        done

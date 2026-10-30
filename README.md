@@ -3,7 +3,21 @@
 
 > A free ebook for .NET developers who want to build real AI-powered applications — without the hype, without the Python tax, and without spending a fortune on API credits.
 
-You can also download this ebook from leanpub (<a href="https://leanpub.com/promptengineeringfornetdevelopers">https://leanpub.com/promptengineeringfornetdevelopers</a>)
+[![Build](https://github.com/taswar/PromptEngineeringForDotNetDevelopers/actions/workflows/dotnet.yml/badge.svg)](https://github.com/taswar/PromptEngineeringForDotNetDevelopers/actions/workflows/dotnet.yml)
+![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
+![C#](https://img.shields.io/badge/C%23-AI%20apps-239120)
+[![Free ebook](https://img.shields.io/badge/ebook-free%20on%20Leanpub-blue)](https://leanpub.com/promptengineeringfornetdevelopers)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](LICENSE)
+
+<p align="center">
+  <img src="./cover/PromptEngineeringForDotNETDevelopers-Coverv2.png" alt="Prompt Engineering for .NET Developers ebook cover" width="320"/>
+</p>
+
+You can also download this ebook free from [Leanpub](https://leanpub.com/promptengineeringfornetdevelopers).
+
+- 🧠 More C# samples for current AI models: [AI models for C# developers](https://taswar.zeytinsoft.com/foundry-ai-models-csharp/)
+- ✍️ New posts on AI for .NET developers: [taswar.zeytinsoft.com](https://taswar.zeytinsoft.com/)
+
 ---
 
 <p align="center">
@@ -33,7 +47,7 @@ dotnet run
 ## Prerequisites
 
 - .NET 10 or later
-- An IDE (Visual Studio 2022, VS Code with C# Dev Kit, or Rider)
+- An IDE (Visual Studio 2026, VS Code with C# Dev Kit, or Rider)
 - Either: a free [LM Studio](https://lmstudio.ai) install **or** an OpenAI / Azure API key
 - A healthy scepticism of AI marketing copy
 
@@ -83,8 +97,8 @@ Option A (LM Studio) is active by default. To use OpenAI or Azure AI Foundry, co
 # Chapter 2 — unit tests (no LM Studio required)
 dotnet test chapter-02/tests/HelloAI.Tests --filter "Category!=Integration"
 
-# Chapter 3 — unit tests
-dotnet test chapter-03/tests/ParameterPlayground.Tests
+# Chapter 3 — unit tests (no LM Studio required)
+dotnet test chapter-03/tests/ParameterPlayground.Tests --filter "Category!=Integration"
 
 # Chapter 4 — unit tests (31 tests, no LM Studio required)
 dotnet test chapter-04/tests/PromptBuilder.Tests

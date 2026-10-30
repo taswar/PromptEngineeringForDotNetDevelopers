@@ -4,7 +4,7 @@ Hi, I'm Taswar. 👋
 
 If you've made it to the end of this book, thanks for spending the time. That is genuinely not a small thing — you could have been watching a movie or debugging something more urgent.
 
-I've been writing about .NET, C#, and cloud since 2009 — starting on a small WordPress blog at [taswar.zeytinsoft.com](https://taswar.zeytinsoft.com), when Silverlight was still a thing and everyone was arguing about whether jQuery counted as a real framework. That blog is still going. Recent posts range from *"Law of Demeter with a girlfriend-contacts-list analogy"* (2009, aged surprisingly well) to *"LLM in Microsoft Foundry"*.
+I've been writing about .NET, C#, and cloud since 2009 — starting on a small WordPress blog at [taswar.zeytinsoft.com](https://taswar.zeytinsoft.com?utm_source=github&utm_medium=readme&utm_campaign=PromptEngineeringForDotNetDevelopers&utm_content=blog-home), when Silverlight was still a thing and everyone was arguing about whether jQuery counted as a real framework. That blog is still going. Recent posts range from *"Law of Demeter with a girlfriend-contacts-list analogy"* (2009, aged surprisingly well) to *"LLM in Microsoft Foundry"*.
 
 By day I work as a **Cloud Solution Architect at Microsoft**, focused on AI, security, and helping enterprise customers ship things that actually work in production. 
 Outside of work, I:
@@ -31,7 +31,7 @@ This book exists because Microsoft.Extensions.AI (MEAI) exists, Azure AI Foundry
 
 | | Where |
 |---|---|
-| **Blog** | [taswar.zeytinsoft.com](https://taswar.zeytinsoft.com) — .NET, AI, cloud, honest opinions |
+| **Blog** | [taswar.zeytinsoft.com](https://taswar.zeytinsoft.com?utm_source=github&utm_medium=readme&utm_campaign=PromptEngineeringForDotNetDevelopers&utm_content=blog-home) — .NET, AI, cloud, honest opinions |
 | **LinkedIn** | [linkedin.com/in/taswarbhatti](https://www.linkedin.com/in/taswarbhatti) — day job, connections, the *5 Highlights Thursday* newsletter |
 | **GitHub** | [github.com/taswar](https://github.com/taswar) — sample code, this book's repo, occasional side projects |
 | **Support the work** | [buymeacoffee.com/taswar](https://buymeacoffee.com/taswar) — if any of this saved you a debug session |

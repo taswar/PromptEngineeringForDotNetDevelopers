@@ -15,8 +15,8 @@
 
 You can also download this ebook free from [Leanpub](https://leanpub.com/promptengineeringfornetdevelopers).
 
-- 🧠 More C# samples for current AI models: [AI models for C# developers](https://taswar.zeytinsoft.com/foundry-ai-models-csharp/)
-- ✍️ New posts on AI for .NET developers: [taswar.zeytinsoft.com](https://taswar.zeytinsoft.com/)
+- 🧠 More C# samples for current AI models: [AI models for C# developers](https://taswar.zeytinsoft.com/foundry-ai-models-csharp/?utm_source=github&utm_medium=readme&utm_campaign=PromptEngineeringForDotNetDevelopers&utm_content=ai-models-hub)
+- ✍️ New posts on AI for .NET developers: [taswar.zeytinsoft.com](https://taswar.zeytinsoft.com/?utm_source=github&utm_medium=readme&utm_campaign=PromptEngineeringForDotNetDevelopers&utm_content=blog-home)
 
 ---
 

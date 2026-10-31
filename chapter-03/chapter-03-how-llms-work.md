@@ -10,6 +10,8 @@ status: seedling
 
 # Chapter 3 — How LLMs Work (Just Enough Theory)
 
+📥 **Read it offline:** this chapter is part of a free ebook. [Download all 7 chapters as PDF or EPUB on Leanpub](https://leanpub.com/promptengineeringfornetdevelopers).
+
 > **What you'll learn:**
 > - What tokens are, why they're the unit everything else is measured in, and how to estimate them without a PhD
 > - How the context window works — and what happens (silently) when you overflow it
@@ -651,5 +653,7 @@ Now that you understand what the model actually receives (tokens), how much of i
 Chapter 4 breaks down what makes a prompt work — the structure, the two foundational principles, and the difference between a prompt that gets you what you wanted and one that gets you something plausible-looking but wrong. The theory ends here. The engineering starts there.
 
 ---
+
+📥 **Enjoyed this chapter?** Get the whole book free as a PDF or EPUB on [Leanpub](https://leanpub.com/promptengineeringfornetdevelopers), with every update as new versions are published.
 
 *← [Chapter 2 — Setting Up Your AI Development Environment](../chapter-02/chapter-02-setting-up-your-environment.md) | [Chapter 4 — Anatomy of a Great Prompt →](../chapter-04/chapter-04-anatomy-of-a-great-prompt.md)*

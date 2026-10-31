@@ -1,5 +1,7 @@
 # Chapter 5 — Core Prompting Techniques
 
+📥 **Read it offline:** this chapter is part of a free ebook. [Download all 7 chapters as PDF or EPUB on Leanpub](https://leanpub.com/promptengineeringfornetdevelopers).
+
 > **What you'll learn:**
 > - Why different problems call for different prompting strategies, and how to pick the right one
 > - How few-shot examples function as golden test fixtures for model behavior
@@ -630,6 +632,8 @@ Chapter 5 was about *how to ask*. Chapter 6 is about *what you get back*. We'll 
 The `PromptBuilder` carries forward. The `TechniqueBenchmark` patterns carry forward. Chapter 6 adds the output discipline that makes them production-ready.
 
 ---
+
+📥 **Enjoyed this chapter?** Get the whole book free as a PDF or EPUB on [Leanpub](https://leanpub.com/promptengineeringfornetdevelopers), with every update as new versions are published.
 
 *← [Chapter 4 — Anatomy of a Great Prompt](../chapter-04/chapter-04-anatomy-of-a-great-prompt.md) | [Chapter 6 — Structured Outputs and Advanced Patterns](../chapter-06/chapter-06-structured-outputs.md) →*
 

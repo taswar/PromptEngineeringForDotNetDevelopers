@@ -1,5 +1,7 @@
 # Chapter 1 — The .NET Developer's AI Landscape
 
+📥 **Read it offline:** this chapter is part of a free ebook. [Download all 7 chapters as PDF or EPUB on Leanpub](https://leanpub.com/promptengineeringfornetdevelopers).
+
 > **What you'll learn:** Why AI matters to C# developers (without the marketing speak), what LLMs actually are, how the Microsoft AI stack fits together, and where this book is taking you.
 
 > **No code just a peek I promise in this chapter.** Just concepts, honest opinions, and a roadmap. The code starts in Chapter 2. Grab a coffee.
@@ -340,5 +342,7 @@ Here's what to take from this chapter:
 In Chapter 2, we install LM Studio, download a local model, set up the NuGet packages, and write your first `IChatClient.GetResponseAsync()` call — hitting all three backends (local, OpenAI, Azure) with the same C# code. No API key required to get started. If you have a GPU with 4 GB of VRAM, you can do the whole next chapter without spending a cent. Let's go. 🙂
 
 ---
+
+📥 **Enjoyed this chapter?** Get the whole book free as a PDF or EPUB on [Leanpub](https://leanpub.com/promptengineeringfornetdevelopers), with every update as new versions are published.
 
 *← [README](../README.md) | [Chapter 2 →](../chapter-02/chapter-02-setting-up-your-environment.md)*

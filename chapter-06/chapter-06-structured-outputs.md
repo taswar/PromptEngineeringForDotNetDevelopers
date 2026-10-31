@@ -1,5 +1,7 @@
 # Chapter 6 — Structured Outputs and Advanced Patterns
 
+📥 **Read it offline:** this chapter is part of a free ebook. [Download all 7 chapters as PDF or EPUB on Leanpub](https://leanpub.com/promptengineeringfornetdevelopers).
+
 > **What you'll learn:**
 > - How to constrain LLM output to typed C# records you can actually use in production code
 > - The four ways models break your JSON parsing — and how to handle each one without rewriting from scratch every time
@@ -862,5 +864,7 @@ With Azure, you can also enable JSON Schema mode for more reliable output — ad
 Chapter 7 moves from individual techniques to complete patterns for specific developer tasks: changelog generation from git history, code review summarisation, issue triage, and test generation. You'll see how the structured output approach from this chapter combines with multi-turn conversation patterns to build tooling that a development team can actually use.
 
 ---
+
+📥 **Enjoyed this chapter?** Get the whole book free as a PDF or EPUB on [Leanpub](https://leanpub.com/promptengineeringfornetdevelopers), with every update as new versions are published.
 
 *← [Chapter 5 — Core Prompting Techniques](../chapter-05/chapter-05-core-prompting-techniques.md) | [Chapter 7 — Prompt Patterns for Real Developer Workflows](../chapter-07/chapter-07-prompt-patterns.md) →*

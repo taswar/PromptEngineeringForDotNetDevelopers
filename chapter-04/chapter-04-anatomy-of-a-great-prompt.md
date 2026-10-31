@@ -10,6 +10,8 @@ status: seedling
 
 # Chapter 4 — Anatomy of a Great Prompt
 
+📥 **Read it offline:** this chapter is part of a free ebook. [Download all 7 chapters as PDF or EPUB on Leanpub](https://leanpub.com/promptengineeringfornetdevelopers).
+
 > **What you'll learn:**
 > - The five structural parts of every effective prompt — and why each one matters
 > - The two foundational principles of prompt engineering (drawn from the DeepLearning.AI course taught by Andrew Ng and Isa Fulford)
@@ -705,5 +707,7 @@ Zero-shot prompting (which you've already been using, whether you called it that
 By the end of Chapter 5, your prompts won't only be structured — they'll be using the right technique for the right task. The `PromptBuilder` you built here is the vehicle. Chapter 5 is learning to drive it.
 
 ---
+
+📥 **Enjoyed this chapter?** Get the whole book free as a PDF or EPUB on [Leanpub](https://leanpub.com/promptengineeringfornetdevelopers), with every update as new versions are published.
 
 *← [Chapter 3 — How LLMs Work (Just Enough Theory)](../chapter-03/chapter-03-how-llms-work.md) | [Chapter 5 — Core Prompting Techniques →](../chapter-05/chapter-05-core-prompting-techniques.md)*

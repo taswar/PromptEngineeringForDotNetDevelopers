@@ -1,5 +1,7 @@
 # Chapter 7 — Prompt Patterns for Real Developer Workflows
 
+📥 **Read it offline:** this chapter is part of a free ebook. [Download all 7 chapters as PDF or EPUB on Leanpub](https://leanpub.com/promptengineeringfornetdevelopers).
+
 > **What you'll learn:**
 > - How to structure prompts for four real developer tasks: code review, test generation, commit messages, and documentation
 > - When structured JSON output makes sense and when plain text is the right choice
@@ -872,5 +874,7 @@ Start with one pattern from this chapter. Put it into your actual workflow — n
 | What comes next | Tool calling → RAG → Agents → MCP → Azure AI Foundry. Same `IChatClient` abstraction, bigger problem space. |
 
 ---
+
+📥 **Enjoyed the book?** Keep it as a free PDF or EPUB from [Leanpub](https://leanpub.com/promptengineeringfornetdevelopers), with every update as new versions are published.
 
 *← [Chapter 6 — Structured Outputs](../chapter-06/chapter-06-structured-outputs.md) | End of book*

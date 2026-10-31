@@ -10,6 +10,8 @@ status: seedling
 
 # Chapter 2 — Setting Up Your AI Development Environment
 
+📥 **Read it offline:** this chapter is part of a free ebook. [Download all 7 chapters as PDF or EPUB on Leanpub](https://leanpub.com/promptengineeringfornetdevelopers).
+
 > **What you'll learn:**
 > - How to run a local LLM on your own hardware with LM Studio — no cloud account, no API key, no bill
 > - How to connect to the OpenAI API and Azure AI Foundry for cloud-backed inference
@@ -560,5 +562,7 @@ Chapter 3 is where the model stops being a black box. You will learn how LLMs ac
 Honestly, that chapter changed how I write prompts. It is worth the read even if you want to skip to the patterns. 🙂
 
 ---
+
+📥 **Enjoyed this chapter?** Get the whole book free as a PDF or EPUB on [Leanpub](https://leanpub.com/promptengineeringfornetdevelopers), with every update as new versions are published.
 
 ← [Chapter 1 — The .NET Developer's AI Landscape](../chapter-01/chapter-01-the-dotnet-developers-ai-landscape.md) | [Chapter 3 — How LLMs Work (Just Enough Theory)](../chapter-03/) →
